@@ -1,0 +1,75 @@
+import { ChevronsUpDown } from "lucide-react";
+import type { JSX } from "react";
+
+type TableColumn<T> = {
+  key: string;
+  label: string;
+  format?: string;
+  displayItem?: (params: TableData<T>) => JSX.Element;
+};
+
+type TableData<T> = T & (Record<string, any> | null);
+
+type Props<T> = {
+  columns: TableColumn<T>[];
+  data: TableData<T>[];
+  onClick?: (item: TableData<T>) => void;
+};
+
+const Table = <T,>({ columns, data, onClick }: Props<T>) => {
+  const displayValue = (
+    { key, displayItem }: TableColumn<T>,
+    item: TableData<T>
+  ) => {
+    return item && item[key]
+      ? displayItem
+        ? displayItem(item)
+        : item[key]
+      : "";
+  };
+
+  return (
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table
+        id="selection-table"
+        className="w-full text-sm text-left text-accent"
+      >
+        <thead className="text-sm uppercase bg-accent-light text-bold">
+          <tr>
+            {columns.map(({ key, label, format = "" }) => (
+              <th key={`th-${key}`} className="px-6 py-3">
+                <span
+                  className="flex items-center cursor-pointer"
+                  data-format={format}
+                >
+                  {label}
+                  <ChevronsUpDown size={15} className="ml-2" />
+                </span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {data.map((item, index) => (
+            <tr
+              key={`tr-${index}`}
+              className="hover:bg-gray-100 cursor-pointer"
+              onClick={onClick ? () => onClick(item) : undefined}
+            >
+              {columns.map((col) => (
+                <td
+                  key={`td-${index}-${col.key}`}
+                  className="px-6 py-4 whitespace-nowrap"
+                >
+                  {displayValue(col, item)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Table;

@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/src/styles/Poppins.woff2") format("woff2");
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* TAILWIND TYPOGRAFY */
+
+@theme {
+  /* Paleta de colores para una app de agricultura */
+  --color-primary: #4caf50; /* Verde */
+  --color-primary-light: #a5d6a7; /* Verde claro */
+  --color-secondary: #8bc34a; /* Verde claro */
+  --color-secondary-light: #c5e1a5; /* Verde muy claro */
+  /* Amarillo */
+  --color-tertiary: #b5ad67; /* Amarillo */
+  --color-tertiary-light: #fff9c4; /* Amarillo claro */
+  --color-accent: var(--color-gray-800);
+  --color-accent-light: var(--color-gray-400);
+  --color-background: 15deg, rgba(218, 255, 179, 1) 22%,
+    rgba(172, 222, 171, 1) 60%;
+  --color-text: #333333; /* Texto oscuro */
+  --color-border: #e0e0e0; /* Borde claro */
+  /* Status */
+  --color-error: #f44336; /* Rojo */
+  --color-error-light: #ffcdd2; /* Rojo claro */
+  --color-success: #4caf50; /* Verde */
+  --color-success-light: #c8e6c9; /* Verde claro */
+  --color-warning: var(--color-yellow-500); /* Amarillo */
+  --color-warning-light: var(--color-yellow-100); /* Amarillo claro */
+  --color-info: #2196f3; /* Azul */
+  --color-info-light: #bbdefb; /* Azul claro */
+
+  /* Fuentes */
+  --font-sans: "Poppins", system-ui, sans-serif;
+  --font-serif: "Poppins", serif;
+
+  /* Breakpoints */
+  --breakpoint-xs: 350px;
+}
+
+/* CSS puro */
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
