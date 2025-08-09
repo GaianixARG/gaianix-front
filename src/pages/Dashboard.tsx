@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import PrivateLayout from "../layouts/PrivateLayout";
 import useDashboard from "../hooks/useDashboard";
 import { useLoading } from "../context/LoadingContext";
@@ -15,7 +14,7 @@ export default function Dashboard() {
 
   return (
     <PrivateLayout>
-      <div className="p-6 md:p-10 space-y-10">
+      <div className="sm:p-6 space-y-10">
         {/* Cards resumen */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {summary.map((item) => (

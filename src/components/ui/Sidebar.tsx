@@ -1,8 +1,8 @@
 import { LogOut, Menu } from "lucide-react";
-import logo from "../assets/images/logo.png";
-import Button from "./ui/Button";
-import { PRIVATE_ROUTES_ICONS } from "../constants/routes";
-import { useAuth } from "../context/AuthContext";
+import logo from "../../assets/images/logo.png";
+import Button from "./Button";
+import { useAuth } from "../../context/AuthContext";
+import { PRIVATE_ROUTES_ICONS } from "../../constants/routes";
 
 const Sidebar = () => {
   const { logout, user, isAuthenticated } = useAuth();
@@ -14,7 +14,7 @@ const Sidebar = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
               <Button
-                dataDrawerTarget="logo-sidebar"
+                dataSidebarTarget="logo-sidebar"
                 className="inline-flex items-center p-2 text-smrounded-lg sm:hidden text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
               >
                 <span className="sr-only">Open sidebar</span>
@@ -56,21 +56,27 @@ const Sidebar = () => {
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
           <ul className="space-y-2 font-medium">
-            {PRIVATE_ROUTES_ICONS.map(({ path, label, icon: Icon }) => (
-              <li key={path}>
-                <a
-                  href={path}
-                  className="flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group"
-                >
-                  <Icon
-                    size={22}
-                    className="shrink-0 mr-4 text-gray-400 transition duration-75 group-hover:text-white"
-                    aria-hidden="true"
-                  />
-                  <span className="flex-1 ms-3 whitespace-nowrap">{label}</span>
-                </a>
-              </li>
-            ))}
+            {PRIVATE_ROUTES_ICONS.map(
+              ({ path, label, icon: Icon, enabled }) => (
+                <li key={path}>
+                  <a
+                    href={path}
+                    className={`flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group ${
+                      enabled ? "" : "opacity-50 pointer-events-none"
+                    }`}
+                  >
+                    <Icon
+                      size={22}
+                      className="shrink-0 mr-4 text-gray-400 transition duration-75 group-hover:text-white"
+                      aria-hidden="true"
+                    />
+                    <span className="flex-1 ms-3 whitespace-nowrap">
+                      {label}
+                    </span>
+                  </a>
+                </li>
+              )
+            )}
           </ul>
         </div>
       </aside>

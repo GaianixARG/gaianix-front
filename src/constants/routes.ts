@@ -5,23 +5,29 @@ import { LABEL_PER_ICON } from "./conversiones";
 const Landing = lazy(() => import("../pages/Landing"));
 const Login = lazy(() => import("../pages/Login"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
-const Orders = lazy(() => import("../pages/Orders"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const Siembra = lazy(() => import("../pages/Siembra"));
+const Fertilizacion = lazy(() => import("../pages/Fertilizacion"));
+const Riego = lazy(() => import("../pages/Riego"));
+const Cosecha = lazy(() => import("../pages/Cosecha"));
 
 const LABEL_PER_COMPONENT: DicRoute = {
   Landing: Landing,
   Login: Login,
   NotFound: NotFound,
   Dashboard: Dashboard,
-  Ordenes: Orders,
   Siembra: Siembra,
+  Fertilización: Fertilizacion,
+  Riego: Riego,
+  Cosecha: Cosecha,
 };
 
 export const PRIVATE_ROUTES = [
-  { path: "/dashboard", label: "Dashboard" },
-  { path: "/ordenes", label: "Ordenes" },
-  { path: "/siembra", label: "Siembra" },
+  { path: "/dashboard", label: "Dashboard", enabled: true },
+  { path: "/siembra", label: "Siembra", enabled: true },
+  { path: "/fertilizacion", label: "Fertilización", enabled: false },
+  { path: "/riego", label: "Riego", enabled: false },
+  { path: "/cosecha", label: "Cosecha", enabled: false },
 ];
 
 export const PUBLIC_ROUTES = [

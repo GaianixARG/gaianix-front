@@ -11,14 +11,21 @@ import {
   COLOR_PER_STATUS,
   TEXT_PER_STATUS_COLOR,
 } from "../../constants/conversiones";
+import useButton from "../../hooks/useButton";
 
 type Props = {
   status: TStatus;
   orders: IOrder[];
   onDropOrder: (orderId: string, newStatus: TStatus) => void;
+  onSelectOrder: (orderId: string, status: TStatus) => void;
 };
 
-const KanbanColumn = ({ status, orders, onDropOrder }: Props) => {
+const KanbanColumn = ({
+  status,
+  orders,
+  onDropOrder,
+  onSelectOrder,
+}: Props) => {
   const { showAlert } = useAlert();
   const [isActive, setIsActive] = useState(false);
 
@@ -65,6 +72,15 @@ const KanbanColumn = ({ status, orders, onDropOrder }: Props) => {
     isActive ? BG_PER_STATUS_COLOR[colorStatus] : "bg-gray-200/50"
   }`;
 
+  const { handleToggleDrawer } = useButton({
+    dataDrawerTarget: "drawer-form",
+  });
+
+  const handleSelectOrder = (orderId: string, status: TStatus) => {
+    onSelectOrder(orderId, status);
+    handleToggleDrawer("open");
+  };
+
   return (
     <div
       className={bgContainer}
@@ -74,21 +90,19 @@ const KanbanColumn = ({ status, orders, onDropOrder }: Props) => {
     >
       <div className="flex items-center justify-between mb-4 bg-white text-sm font-semibold p-2 rounded-full">
         <div className="flex items-center gap-2">
-          <Badge color="accent" label={orders.length.toFixed(0)} />
+          <Badge
+            color="accent"
+            label={orders.length.toFixed(0)}
+            className="py-1"
+          />
           <span className={claseTextoTituloColumna}>{status}</span>
         </div>
         <div className="flex items-center gap-1">
           <Button
             tipo="white"
             className="p-1"
-            onClick={() =>
-              showAlert({
-                title: "Crear nueva orden",
-                message: "Funcionalidad en desarrollo.",
-                type: "error",
-              })
-            }
-            title="Ordenar"
+            onClick={() => handleSelectOrder("", status)}
+            title="Crear nueva orden"
           >
             <PlusIcon className="w-4 h-4" />
           </Button>
@@ -132,6 +146,7 @@ const KanbanColumn = ({ status, orders, onDropOrder }: Props) => {
               key={order.id}
               {...order}
               onDragStart={handleDragStart}
+              onClick={() => handleSelectOrder(order.id, status)}
             />
           ))
         ) : (

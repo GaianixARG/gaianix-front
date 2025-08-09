@@ -64,7 +64,7 @@ const Carrousel = <T,>({
 
   return (
     <div id={id} className="relative w-full" data-carousel={tipo}>
-      <div className="relative h-24 overflow-hidden rounded-lg md:h-48 pt-10">
+      <div className="relative h-48 sm:h-24 overflow-hidden rounded-lg md:h-48 pt-10">
         {data.map((item, index) => (
           <div
             key={index}

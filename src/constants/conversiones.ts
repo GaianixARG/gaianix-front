@@ -1,12 +1,14 @@
-import { ChartPie, ClipboardList, Sprout } from "lucide-react";
+import { BugOff, ChartPie, Droplets, Sprout, Tractor } from "lucide-react";
 import type { TBoton, TColors, TStatus, TStatusColor } from "./types";
 import type { DicIcon, DicSize } from "./interfaces";
 import { STATUS } from "./enums";
 
 export const LABEL_PER_ICON: DicIcon = {
   Dashboard: ChartPie,
-  Ordenes: ClipboardList,
   Siembra: Sprout,
+  Fertilización: BugOff,
+  Riego: Droplets,
+  Cosecha: Tractor,
 };
 
 export const SizeMap: DicSize = {
@@ -21,7 +23,7 @@ export const CLASE_X_BOTON: Record<TBoton, string> = {
   secondary:
     "bg-secondary text-white hover:bg-secondary-light hover:text-black",
   tertiary: "bg-tertiary text-white hover:bg-tertiary-light hover:text-black",
-  accent: "bg-accent text-white hover:bg-accent-light",
+  accent: "bg-accent text-accent-light hover:bg-accent-light hover:text-white",
   "primary-light":
     "bg-primary-light text-black hover:bg-primary hover:text-white",
   "secondary-light":

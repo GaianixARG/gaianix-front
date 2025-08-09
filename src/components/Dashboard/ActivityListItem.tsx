@@ -2,7 +2,7 @@ import type { IRecentActivity } from "../../constants/interfaces";
 
 const ActivityListItem = ({ title, description, date }: IRecentActivity) => {
   return (
-    <div className="bg-white p-4 rounded-xl shadow-md w-100">
+    <div className="bg-white p-4 rounded-xl shadow-md w-70 sm:w-100">
       <p className="text-sm text-muted-foreground mb-1">
         {date.toLocaleDateString()}
       </p>

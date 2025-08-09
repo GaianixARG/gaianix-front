@@ -17,3 +17,21 @@ export const ROLES = {
   Operario: "Operario",
   Visualizacion: "Visualización",
 } as const;
+
+export const RIEGOS = {
+  Goteo: "Goteo",
+  Aspersión: "Aspersión",
+  Inundación: "Inundación",
+} as const;
+
+export const PRIORIDADES = {
+  Alta: "Alta",
+  Media: "Media",
+  Baja: "Baja",
+} as const;
+
+export const DISTANCIA_SIEMBRA = {
+  Cercana: 62,
+  Media: 70,
+  Lejana: 90,
+} as const;

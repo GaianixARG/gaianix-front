@@ -14,7 +14,7 @@ const columnsOrderTable = [
     key: "status",
     label: "Estado",
     displayItem: ({ status }: IOrder) => (
-      <Badge color={COLOR_PER_STATUS[status]} label={status} />
+      <Badge color={COLOR_PER_STATUS[status]} label={status} className="py-1" />
     ),
   },
 ];

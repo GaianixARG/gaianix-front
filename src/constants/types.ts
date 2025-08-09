@@ -1,7 +1,19 @@
-import type { ORDER_TYPES, STATUS, ROLES } from "./enums";
+import type {
+  ORDER_TYPES,
+  STATUS,
+  ROLES,
+  RIEGOS,
+  PRIORIDADES,
+  DISTANCIA_SIEMBRA,
+} from "./enums";
 
 export type TOrder = keyof typeof ORDER_TYPES;
+export type TRiego = keyof typeof RIEGOS;
+export type TPrioridad = keyof typeof PRIORIDADES;
+export type TDistanciaSiembra =
+  (typeof DISTANCIA_SIEMBRA)[keyof typeof DISTANCIA_SIEMBRA];
 
+export type TFunctionToggle = "toggle" | "open" | "close";
 export type TRol = keyof typeof ROLES;
 export type TStatus = (typeof STATUS)[keyof typeof STATUS];
 export type TStatusColor = "error" | "success" | "warning" | "info" | "white";

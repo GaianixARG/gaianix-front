@@ -1,46 +1,41 @@
 import { CLASE_X_BOTON } from "../../constants/conversiones";
-import type { TBoton } from "../../constants/types";
+import type { TBoton, TFunctionToggle } from "../../constants/types";
+import useButton from "../../hooks/useButton";
 
 type Props = {
   children: React.ReactNode;
   tipo?: TBoton | undefined;
+  dataSidebarTarget?: string;
   dataDrawerTarget?: string;
   dataDropdownTarget?: string;
+  functionToggle?: TFunctionToggle;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = ({
   children,
   tipo,
+  dataSidebarTarget,
   dataDrawerTarget,
   dataDropdownTarget,
+  functionToggle,
   className,
   onClick,
   ...props
 }: Props) => {
-  const handleShowSidebar = () => {
-    if (dataDrawerTarget) {
-      const sidebar = document.getElementById(dataDrawerTarget);
-      if (sidebar) {
-        sidebar.classList.toggle("-translate-x-full");
-      }
-    }
-  };
-
-  const handleOpenDropdown = () => {
-    if (dataDropdownTarget) {
-      const dropdown = document.getElementById(dataDropdownTarget);
-      if (dropdown) {
-        dropdown.classList.toggle("hidden");
-      }
-    }
-  };
+  const { handleToggleSidebar, handleToggleDrawer, handleOpenDropdown } =
+    useButton({
+      dataSidebarTarget,
+      dataDrawerTarget,
+      dataDropdownTarget,
+    });
 
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    handleShowSidebar();
-    handleOpenDropdown();
     if (onClick) onClick(event);
+    handleToggleSidebar(functionToggle);
+    handleToggleDrawer(functionToggle);
+    handleOpenDropdown();
   };
 
   const clasePorTipo = tipo && CLASE_X_BOTON[tipo] + " transition duration-260";

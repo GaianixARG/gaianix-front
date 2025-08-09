@@ -1,5 +1,12 @@
 import type { LucideIcon, LucideProps } from "lucide-react";
-import type { TOrder, TRol, TStatus } from "./types";
+import type {
+  TDistanciaSiembra,
+  TOrder,
+  TPrioridad,
+  TRiego,
+  TRol,
+  TStatus,
+} from "./types";
 import type { JSX, LazyExoticComponent } from "react";
 
 // Data
@@ -24,15 +31,62 @@ export interface ISummaryItem {
   icon: LucideIcon;
 }
 
-export interface IOrder {
+export interface IOrderBase {
   id: string;
+  codigo: string;
   type: TOrder;
-  field: string;
-  date: string;
+  title: string;
+  lote: string;
+  dateOfCreation: string;
   status: TStatus;
   creator: IUser;
-  title: string;
-  description: string;
+}
+
+export type IOrder =
+  | IOrderSiembra
+  | IOrderRiego
+  | IOrderFertilizacion
+  | IOrderCosecha;
+
+export interface IOrderSiembra extends IOrderBase {
+  type: "Siembra";
+  siembra: {
+    fechaMaxSiembra: string;
+    prioridad: TPrioridad;
+    tipoSemilla: string;
+    cantidadSemillasHa: number;
+    cantidadHectareas: number;
+    fertilizante: string;
+    distanciaSiembra: TDistanciaSiembra;
+  };
+}
+
+export interface IOrderRiego extends IOrderBase {
+  type: "Riego";
+  riego: {
+    metodo: TRiego;
+    cantidadMm: number;
+    horas: number;
+  };
+}
+
+export interface IOrderFertilizacion extends IOrderBase {
+  type: "Fertilización";
+  fertilizacion: {
+    fertilizante: string;
+    dosisKgHa: number;
+    metodo: string;
+  };
+}
+
+export interface IOrderCosecha extends IOrderBase {
+  type: "Cosecha";
+  cosecha: {
+    fechaCosecha: string;
+    rendimientoEstimado: number;
+    maquinaria: string;
+    humedad: number;
+  };
 }
 
 export interface IRecentActivity {
