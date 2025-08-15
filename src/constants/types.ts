@@ -6,6 +6,14 @@ import type {
   PRIORIDADES,
   DISTANCIA_SIEMBRA,
 } from "./enums";
+import type {
+  IOrder,
+  IOrderBase,
+  IOrderCosecha,
+  IOrderFertilizacion,
+  IOrderRiego,
+  IOrderSiembra,
+} from "./interfaces";
 
 export type TOrder = keyof typeof ORDER_TYPES;
 export type TRiego = keyof typeof RIEGOS;
@@ -47,6 +55,24 @@ export type TAlert = {
   message: string;
   title: string;
   onClose?: () => void;
+};
+// generar un tipo que contenga las propiedades de IOrderSiembra con el prefijo "siembra."
+export type TPropertiesSiembra = `siembra.${keyof IOrderSiembra["siembra"]}`;
+export type TPropertiesRiego = `riego.${keyof IOrderRiego["riego"]}`;
+export type TPropertiesFertilizacion =
+  `fertilizacion.${keyof IOrderFertilizacion["fertilizacion"]}`;
+export type TPropertiesCosecha = `cosecha.${keyof IOrderCosecha["cosecha"]}`;
+
+export type TPropertiesOrder =
+  | keyof IOrderBase
+  | TPropertiesCosecha
+  | TPropertiesFertilizacion
+  | TPropertiesRiego
+  | TPropertiesSiembra;
+
+export type TFormDetailsOrder = {
+  order: IOrder;
+  onChangeValue: (property: TPropertiesOrder, value: any) => void;
 };
 
 // CONTEXT TYPES

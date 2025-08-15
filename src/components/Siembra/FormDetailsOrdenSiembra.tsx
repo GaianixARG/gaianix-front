@@ -1,12 +1,16 @@
 import React from "react";
-import type { IOrder, IOrderSiembra } from "../../constants/interfaces";
+import type { IOrderSiembra } from "../../constants/interfaces";
 import { DISTANCIA_SIEMBRA, PRIORIDADES } from "../../constants/enums";
 import DatePicker from "../ui/DatePicker/DatePicker";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import { getArrayFromEnum } from "../../constants/utils";
+import type { TFormDetailsOrder } from "../../constants/types";
 
-const FormDetailsOrdenSiembra = (order: IOrder) => {
+const FormDetailsOrdenSiembra = ({
+  order,
+  onChangeValue,
+}: TFormDetailsOrder) => {
   const siembraDetails = order as IOrderSiembra;
 
   return (
@@ -19,6 +23,7 @@ const FormDetailsOrdenSiembra = (order: IOrder) => {
             placeholder="Selecciona una fecha"
             label="Fecha Máxima"
             required
+            onChange={(date) => onChangeValue("siembra.fechaMaxSiembra", date)}
           />
         </div>
 
@@ -31,6 +36,7 @@ const FormDetailsOrdenSiembra = (order: IOrder) => {
             options={getArrayFromEnum(PRIORIDADES)}
             defaultValue={siembraDetails.siembra.prioridad}
             required
+            onChange={(value) => onChangeValue("siembra.prioridad", value)}
           />
         </div>
       </div>
@@ -45,6 +51,9 @@ const FormDetailsOrdenSiembra = (order: IOrder) => {
             className="text-sm rounded-lg block w-full p-2.5 border bg-gray-700 border-gray-600 placeholder-accent-light text-white focus-visible:ring-1 focus-visible:ring-primary-light focus-visible:outline-none"
             placeholder="Ej: Maíz"
             required
+            onChange={(e) =>
+              onChangeValue("siembra.tipoSemilla", e.target.value)
+            }
           />
         </div>
         <div className="flex-1">
@@ -56,6 +65,9 @@ const FormDetailsOrdenSiembra = (order: IOrder) => {
             defaultValue={siembraDetails.siembra.cantidadSemillasHa}
             placeholder="Ej: 100000"
             required
+            onChange={(e) =>
+              onChangeValue("siembra.cantidadSemillasHa", e.target.value)
+            }
           />
         </div>
       </div>
@@ -69,6 +81,9 @@ const FormDetailsOrdenSiembra = (order: IOrder) => {
           className="text-sm rounded-lg block w-full p-2.5 border bg-gray-700 border-gray-600 placeholder-accent-light text-white focus-visible:ring-1 focus-visible:ring-primary-light focus-visible:outline-none"
           placeholder="Ej: 10"
           required
+          onChange={(e) =>
+            onChangeValue("siembra.cantidadHectareas", e.target.value)
+          }
         />
       </div>
       <div className="flex gap-4 mb-4">
@@ -82,6 +97,9 @@ const FormDetailsOrdenSiembra = (order: IOrder) => {
             className="text-sm rounded-lg block w-full p-2.5 border bg-gray-700 border-gray-600 placeholder-accent-light text-white focus-visible:ring-1 focus-visible:ring-primary-light focus-visible:outline-none"
             placeholder="Ej: Urea"
             required
+            onChange={(e) =>
+              onChangeValue("siembra.fertilizante", e.target.value)
+            }
           />
         </div>
         <div className="flex-1">
@@ -93,6 +111,9 @@ const FormDetailsOrdenSiembra = (order: IOrder) => {
             options={getArrayFromEnum(DISTANCIA_SIEMBRA)}
             defaultValue={siembraDetails.siembra.distanciaSiembra}
             required
+            onChange={(value) =>
+              onChangeValue("siembra.distanciaSiembra", value)
+            }
           />
         </div>
       </div>

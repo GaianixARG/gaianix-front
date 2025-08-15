@@ -11,6 +11,7 @@ type Props = {
   defaultValue?: string;
   classNameLabel?: string;
   required?: boolean;
+  onChange?: (date: string) => void;
 };
 
 const DatePicker = ({
@@ -21,6 +22,7 @@ const DatePicker = ({
   defaultValue,
   classNameLabel,
   required = false,
+  onChange,
 }: Props) => {
   const { formatDate } = useCalendar();
 
@@ -109,6 +111,7 @@ const DatePicker = ({
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             setShowPicker={setShowPicker}
+            onChange={onChange}
           />
         </div>
       )}

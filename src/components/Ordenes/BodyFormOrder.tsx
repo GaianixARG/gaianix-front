@@ -1,10 +1,6 @@
-import type { IOrder } from "../../constants/interfaces";
+import type { TFormDetailsOrder } from "../../constants/types";
 
-type Props = {
-  order: IOrder;
-};
-
-const BodyFormOrder = ({ order }: Props) => {
+const BodyFormOrder = ({ order, onChangeValue }: TFormDetailsOrder) => {
   return (
     <>
       <div className="mb-3">
@@ -21,6 +17,7 @@ const BodyFormOrder = ({ order }: Props) => {
           placeholder="Ej: Cosecha de maiz"
           required
           defaultValue={order.title}
+          onChange={(e) => onChangeValue("title", e.target.value)}
         />
       </div>
       <div className="mb-3">
@@ -37,6 +34,7 @@ const BodyFormOrder = ({ order }: Props) => {
           placeholder="Ej: Lote 1"
           required
           defaultValue={order.lote}
+          onChange={(e) => onChangeValue("lote", e.target.value)}
         />
       </div>
     </>

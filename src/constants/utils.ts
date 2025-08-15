@@ -6,3 +6,11 @@ export const getArrayFromEnum = <T extends Record<string, string | number>>(
     label: key,
   }));
 };
+
+export const muestraFecha = (date: Date) => {
+  return date.toLocaleDateString("es-AR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+};

@@ -43,12 +43,12 @@ const Alert = ({ id, type, title, message, onClose }: TAlert) => {
   return (
     <div
       id={id}
-      className={`flex items-center bg-white/75 gap-5 p-4 w-md mb-4 rounded-lg shadow-md ${ALERT_PER_STATUS_COLOR[type]} z-9999`}
+      className={`flex items-center bg-white/75 gap-5 p-4 w-lg mb-4 rounded-lg shadow-md ${ALERT_PER_STATUS_COLOR[type]} z-9999`}
       role="alert"
     >
       {Icon && <Icon className="w-5 h-5" />}
-      <span className="sr-only">{title}</span>
-      <div className="ms-3 text-sm font-medium">{message}</div>
+      <span className="text-sm font-semibold">{title}:</span>
+      <div className="ms-2 text-sm font-medium">{message}</div>
       {dismissible && (
         <Button
           tipo={type}

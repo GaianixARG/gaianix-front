@@ -1,6 +1,10 @@
 import type { IOrder, IOrderCosecha } from "../../constants/interfaces";
+import type { TFormDetailsOrder } from "../../constants/types";
 
-const FormDetailsOrdenCosecha = (order: IOrder) => {
+const FormDetailsOrdenCosecha = ({
+  order,
+  onChangeValue,
+}: TFormDetailsOrder) => {
   const orderCosecha = order as IOrderCosecha;
 
   return (

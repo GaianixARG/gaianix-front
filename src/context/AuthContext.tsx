@@ -28,13 +28,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const savedAuth = getAuth();
-    setIsAuthenticated(savedAuth);
+    setIsAuthenticated(savedAuth != null);
+    if (savedAuth) {
+      setUser(savedAuth);
+    }
   }, []);
 
   const login = () => {
     setIsAuthenticated(true);
-    setAuth(true);
-    setUser(getUser(""));
+    const userData = getUser("");
+    setAuth(userData);
+    setUser(userData);
     navigate("/dashboard");
   };
 

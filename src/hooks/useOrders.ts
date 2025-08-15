@@ -3,10 +3,15 @@ import { getOrders } from "../services/api";
 import type { FLoading, TOrder, TStatus } from "../constants/types";
 import type { IOrder, IOrderBase } from "../constants/interfaces";
 import { DISTANCIA_SIEMBRA, RIEGOS, STATUS } from "../constants/enums";
+import { useAlert } from "../context/AlertProvider";
+import { muestraFecha } from "../constants/utils";
+import { useAuth } from "../context/AuthContext";
 
 const _initialOrders: IOrder[] = [];
 
 const useOrders = (type: TOrder, setLoading: FLoading) => {
+  const { user } = useAuth();
+  const { showAlert } = useAlert();
   const [orders, setOrders] = useState(_initialOrders);
 
   const fetchOrders = async () => {
@@ -32,6 +37,50 @@ const useOrders = (type: TOrder, setLoading: FLoading) => {
         order.id === orderId ? { ...order, status: newStatus } : order
       )
     );
+  };
+
+  const addNewOrder = (order: IOrder) => {
+    const getNewId = () => {
+      const maxId = orders.reduce(
+        (max, curr) => (curr.id > max ? curr.id : max),
+        "0"
+      );
+      return (parseInt(maxId) + 1).toString();
+    };
+    const getNewCodigo = () => {
+      const codigoPrefix = order.type.charAt(0);
+      const maxCodigo = orders.reduce(
+        (max, curr) => (curr.codigo > max ? curr.codigo : max),
+        codigoPrefix + "0000"
+      );
+      const numberCodigo = parseInt(maxCodigo.slice(1)) + 1;
+      return codigoPrefix + numberCodigo.toString().padStart(4, "0");
+    };
+    const newOrder: IOrder = {
+      ...order,
+      id: getNewId(),
+      codigo: getNewCodigo(),
+      dateOfCreation: muestraFecha(new Date()),
+      creator: user,
+    };
+
+    setOrders((prev) => [...prev, newOrder]);
+    showAlert({
+      type: "success",
+      title: "Orden creada exitosamente",
+      message: `${newOrder.codigo} - ${newOrder.title}`,
+    });
+  };
+
+  const updateOrder = (updatedOrder: IOrder) => {
+    setOrders((prev) =>
+      prev.map((order) => (order.id === updatedOrder.id ? updatedOrder : order))
+    );
+    showAlert({
+      type: "success",
+      title: "Orden actualizada exitosamente",
+      message: updatedOrder.codigo + " " + updatedOrder.title,
+    });
   };
 
   useEffect(() => {
@@ -96,6 +145,8 @@ const useOrders = (type: TOrder, setLoading: FLoading) => {
     getOrdersByStatus,
     handleDropOrder,
     newOrder: initialPerType[type],
+    addNewOrder,
+    updateOrder,
   };
 };
 

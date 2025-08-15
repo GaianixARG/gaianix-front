@@ -14,10 +14,13 @@ type Props = {
 
 const KanbanLayout = ({ title, type }: Props) => {
   const { setLoading } = useLoading();
-  const { handleDropOrder, getOrdersByStatus, newOrder } = useOrders(
-    type,
-    setLoading
-  );
+  const {
+    handleDropOrder,
+    getOrdersByStatus,
+    newOrder,
+    addNewOrder,
+    updateOrder,
+  } = useOrders(type, setLoading);
 
   const [orderSelected, setOrderSelected] = useState(newOrder);
   const handleSelectOrder = (orderId: string, status: TStatus) => {
@@ -29,10 +32,19 @@ const KanbanLayout = ({ title, type }: Props) => {
     }
   };
 
+  const handleChangeProperty = (property: string, value: any) => {
+    setOrderSelected((prev) => ({ ...prev, [property]: value }));
+  };
+
   return (
     <>
       <Drawer closeButton>
-        <FormDetailsOrder order={orderSelected} />
+        <FormDetailsOrder
+          order={orderSelected}
+          onChangeValue={handleChangeProperty}
+          onCreate={addNewOrder}
+          onUpdate={updateOrder}
+        />
       </Drawer>
       <h1 className="text-2xl font-bold text-accent mb-6">{title}</h1>
       <div className="flex justify-center h-full gap-6 p-4 grow-1">

@@ -8,6 +8,7 @@ type Props = {
   setViewDate: React.Dispatch<React.SetStateAction<Date>>;
   setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
   setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
+  onChange?: (date: string) => void;
 };
 
 const Calendar = ({
@@ -16,6 +17,7 @@ const Calendar = ({
   setViewDate,
   setSelectedDate,
   setShowPicker,
+  onChange,
 }: Props) => {
   const { formatDate, dayNames } = useCalendar();
 
@@ -33,6 +35,7 @@ const Calendar = ({
   const handleDateClick = (date: Date) => {
     const formatted = formatDate(date);
     setSelectedDate(formatted);
+    if (onChange) onChange(formatted);
     setShowPicker(false);
   };
 
