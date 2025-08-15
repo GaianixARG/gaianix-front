@@ -1,0 +1,90 @@
+import React from "react";
+import { LogOut, Menu } from "lucide-react";
+import Button from "../Button";
+import { useAuth } from "../../../context/AuthContext";
+import logo from "../../../assets/images/logo.png";
+import { PRIVATE_ROUTES_ICONS } from "../../../constants/routes";
+
+const Sidebar2 = () => {
+  const { logout, user, isAuthenticated } = useAuth();
+  return (
+    <header>
+      <div className="bg-accent p-2 sm:p-0 sm:hidden flex items-center">
+        <Button
+          dataSidebarTarget="logo-sidebar"
+          className="inline-flex items-center p-2 text-sm rounded-lg text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
+        >
+          <span className="sr-only">Open sidebar</span>
+          <Menu />
+        </Button>
+      </div>
+
+      <aside
+        id="logo-sidebar"
+        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        aria-label="Sidebar"
+      >
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800">
+          <a
+            href={isAuthenticated ? "/dashboard" : "/"}
+            className="flex items-center ps-2.5 mb-5"
+          >
+            <img src={logo} className="h-12 me-3" alt="Gainaix Logo" />
+            <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
+              Gaianix
+            </span>
+          </a>
+          {isAuthenticated && user && (
+            <p className="p-2 mb-5 bg-primary/40 rounded-lg text-white text-center">
+              {user.name}
+            </p>
+          )}
+
+          <ul className="space-y-2 font-medium">
+            {PRIVATE_ROUTES_ICONS.map(
+              ({ path, label, icon: Icon, enabled }) => (
+                <li key={path}>
+                  <a
+                    href={path}
+                    className={`flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group ${
+                      enabled ? "" : "opacity-50 pointer-events-none"
+                    }`}
+                  >
+                    <Icon
+                      size={22}
+                      className="shrink-0 mr-4 text-gray-400 transition duration-75 group-hover:text-white"
+                      aria-hidden="true"
+                    />
+                    <span className="flex-1 ms-3 whitespace-nowrap">
+                      {label}
+                    </span>
+                  </a>
+                </li>
+              )
+            )}
+            <ul className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-700">
+              <li>
+                <a
+                  href="#"
+                  onClick={logout}
+                  className="flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group"
+                >
+                  <LogOut
+                    size={22}
+                    className="shrink-0 mr-4 text-gray-400 transition duration-75 group-hover:text-white"
+                    aria-hidden="true"
+                  />
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Desconectarse
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </ul>
+        </div>
+      </aside>
+    </header>
+  );
+};
+
+export default Sidebar2;

@@ -47,8 +47,10 @@ const Alert = ({ id, type, title, message, onClose }: TAlert) => {
       role="alert"
     >
       {Icon && <Icon className="w-5 h-5" />}
-      <span className="text-sm font-semibold">{title}:</span>
-      <div className="ms-2 text-sm font-medium">{message}</div>
+      <div>
+        <span className="font-medium">{title}</span>
+        {message}
+      </div>
       {dismissible && (
         <Button
           tipo={type}

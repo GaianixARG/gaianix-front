@@ -1,3 +1,4 @@
+import { useEffect, useId } from "react";
 import { CLASE_X_BOTON } from "../../constants/conversiones";
 import type { TBoton, TFunctionToggle } from "../../constants/types";
 import useButton from "../../hooks/useButton";
@@ -22,8 +23,11 @@ const Button = ({
   onClick,
   ...props
 }: Props) => {
+  const idButton = useId();
+
   const { handleToggleSidebar, handleToggleDrawer, handleOpenDropdown } =
     useButton({
+      idButton,
       dataSidebarTarget,
       dataDrawerTarget,
       dataDropdownTarget,
@@ -42,6 +46,7 @@ const Button = ({
 
   return (
     <button
+      id={idButton}
       onClick={(event) => handleClick(event)}
       type="button"
       className={className + " rounded font-semibold " + clasePorTipo}

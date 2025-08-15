@@ -1,4 +1,4 @@
-import Sidebar from "../components/ui/Sidebar";
+import Sidebar from "../components/ui/SideBar/Sidebar";
 import ProtectedRoute from "../routes/ProtectedRoute";
 
 type Props = {
@@ -9,7 +9,7 @@ const PrivateLayout = ({ children }: Props) => {
   return (
     <ProtectedRoute to="/login">
       <Sidebar />
-      <main className="flex flex-col items-center bg-linear-(--color-background) min-h-screen h-full sm:ml-50 sm:px-4 py-15 mt-10 min-w-fit">
+      <main className="flex flex-col items-center bg-linear-(--color-background) min-h-screen h-full sm:ml-50 sm:px-4 py-15 min-w-fit">
         {children}
       </main>
     </ProtectedRoute>

@@ -1,12 +1,15 @@
+import { useEffect } from "react";
 import type { TFunctionToggle } from "../constants/types";
 
 type TargetButton = {
+  idButton?: string;
   dataSidebarTarget?: string;
   dataDrawerTarget?: string;
   dataDropdownTarget?: string;
 };
 
 const useButton = ({
+  idButton,
   dataSidebarTarget,
   dataDrawerTarget,
   dataDropdownTarget,
@@ -63,6 +66,23 @@ const useButton = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (dataSidebarTarget && idButton) {
+      document.body.addEventListener("click", (event) => {
+        const sidebar = document.getElementById(dataSidebarTarget);
+        const button = document.getElementById(idButton);
+        if (
+          sidebar &&
+          button &&
+          !button.contains(event.target as Node) &&
+          !sidebar.contains(event.target as Node)
+        ) {
+          handleToggleSidebar("close");
+        }
+      });
+    }
+  }, []);
 
   return {
     handleToggleSidebar,
