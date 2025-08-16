@@ -4,6 +4,7 @@ import Button from "../Button";
 import { useAuth } from "../../../context/AuthContext";
 import logo from "../../../assets/images/logo.png";
 import { PRIVATE_ROUTES_ICONS } from "../../../constants/routes";
+import NavTab from "./NavTab";
 
 const Sidebar2 = () => {
   const { logout, user, isAuthenticated } = useAuth();
@@ -41,43 +42,20 @@ const Sidebar2 = () => {
           )}
 
           <ul className="space-y-2 font-medium">
-            {PRIVATE_ROUTES_ICONS.map(
-              ({ path, label, icon: Icon, enabled }) => (
-                <li key={path}>
-                  <a
-                    href={path}
-                    className={`flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group ${
-                      enabled ? "" : "opacity-50 pointer-events-none"
-                    }`}
-                  >
-                    <Icon
-                      size={22}
-                      className="shrink-0 mr-4 text-gray-400 transition duration-75 group-hover:text-white"
-                      aria-hidden="true"
-                    />
-                    <span className="flex-1 ms-3 whitespace-nowrap">
-                      {label}
-                    </span>
-                  </a>
-                </li>
-              )
-            )}
+            {PRIVATE_ROUTES_ICONS.map((route) => (
+              <li key={route.path}>
+                <NavTab {...route} />
+              </li>
+            ))}
             <ul className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-700">
               <li>
-                <a
-                  href="#"
+                <NavTab
+                  path="#"
+                  label="Desconectarse"
+                  enabled={isAuthenticated}
+                  icon={LogOut}
                   onClick={logout}
-                  className="flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group"
-                >
-                  <LogOut
-                    size={22}
-                    className="shrink-0 mr-4 text-gray-400 transition duration-75 group-hover:text-white"
-                    aria-hidden="true"
-                  />
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Desconectarse
-                  </span>
-                </a>
+                />
               </li>
             </ul>
           </ul>

@@ -6,15 +6,17 @@ type Props = {
   label: string;
   icon: LucideIcon;
   enabled: boolean;
+  onClick?: () => void;
 };
 
-const NavTab = ({ path, label, icon: Icon, enabled }: Props) => {
+const NavTab = ({ path, label, icon: Icon, enabled, onClick }: Props) => {
   return (
     <a
       href={path}
       className={`flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group ${
         enabled ? "" : "opacity-50 pointer-events-none"
       }`}
+      onClick={onClick}
     >
       <Icon
         size={22}
