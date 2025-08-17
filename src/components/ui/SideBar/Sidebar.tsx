@@ -9,7 +9,7 @@ import NavTab from "./NavTab";
 const Sidebar2 = () => {
   const { logout, user, isAuthenticated } = useAuth();
   return (
-    <header>
+    <header className="min-w-full">
       <div className="bg-accent p-2 sm:p-0 sm:hidden flex items-center">
         <Button
           dataSidebarTarget="logo-sidebar"

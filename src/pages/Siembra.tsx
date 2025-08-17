@@ -1,11 +1,13 @@
 import KanbanLayout from "../layouts/KanbanLayout";
 import { ORDER_TYPES } from "../constants/enums";
 import PrivateLayout from "../layouts/PrivateLayout";
+import TabsSiembra from "../components/Siembra/TabsSiembra";
 
 const Siembra = () => {
   return (
     <PrivateLayout>
-      <KanbanLayout title="Siembra" type={ORDER_TYPES.Siembra} />
+      <TabsSiembra />
+      <KanbanLayout title="" type={ORDER_TYPES.Siembra} />
     </PrivateLayout>
   );
 };

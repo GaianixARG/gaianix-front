@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import type {
   ORDER_TYPES,
   STATUS,
@@ -73,6 +74,15 @@ export type TPropertiesOrder =
 export type TFormDetailsOrder = {
   order: IOrder;
   onChangeValue: (property: TPropertiesOrder, value: any) => void;
+};
+
+export type TabHeaderItemProps = {
+  tabId: string;
+  icon?: LucideIcon;
+  label: string;
+  isActive: boolean;
+  contentTabId: string;
+  onClick: () => void;
 };
 
 // CONTEXT TYPES
