@@ -5,10 +5,12 @@ import SummaryCard from "../components/Dashboard/SummaryCard";
 import ActivityListItem from "../components/Dashboard/ActivityListItem";
 import OrdersTable from "../components/Dashboard/OrdersTable";
 import Carrousel from "../components/ui/Carrousel";
+import { useAlert } from "../context/AlertContext";
 
 export default function Dashboard() {
   const { setLoading } = useLoading();
-  const { dashboardData } = useDashboard(setLoading);
+  const {showAlert} = useAlert()
+  const { dashboardData } = useDashboard(setLoading, showAlert);
 
   const { summary, orders, recentActivities } = dashboardData;
 
@@ -16,14 +18,14 @@ export default function Dashboard() {
     <PrivateLayout>
       <div className="sm:p-6 space-y-10">
         {/* Cards resumen */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {summary.map((item) => (
             <SummaryCard key={item.label} {...item} />
           ))}
-        </div>
+        </section>
 
         {/* Carrusel */}
-        <div className="mb-10">
+        <section className="mb-10">
           <h2 className="text-xl font-semibold text-accent mb-4">
             Actividades recientes
           </h2>
@@ -33,15 +35,16 @@ export default function Dashboard() {
             data={recentActivities}
             component={ActivityListItem}
           />
-        </div>
+        </section>
 
         {/* Tabla de órdenes */}
-        <div>
+        <section>
           <h2 className="text-xl font-bold text-accent mb-4">
             Órdenes de trabajo
           </h2>
           <OrdersTable data={orders} />
-        </div>
+        </section>
+
       </div>
     </PrivateLayout>
   );

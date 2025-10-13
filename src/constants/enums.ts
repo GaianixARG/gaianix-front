@@ -1,15 +1,14 @@
-export const STATUS = {
-  Pendiente: "Pendiente",
-  EnCurso: "En curso",
-  Completada: "Completado",
-} as const;
+export enum EStatus {
+  Pendiente,
+  EnCurso,
+  Completada
+}
 
-export const ORDER_TYPES = {
-  Siembra: "Siembra",
-  Fertilización: "Fertilización",
-  Riego: "Riego",
-  Cosecha: "Cosecha",
-} as const;
+export enum EOrderType {
+  Siembra = 'S',
+  Fertilizacion = 'F',
+  Cosecha = 'C'
+}
 
 export const ROLES = {
   Administrador: "Administrador",
@@ -18,20 +17,34 @@ export const ROLES = {
   Visualizacion: "Visualización",
 } as const;
 
-export const RIEGOS = {
-  Goteo: "Goteo",
-  Aspersión: "Aspersión",
-  Inundación: "Inundación",
-} as const;
+export enum ERiego {
+  Goteo = 'Goteo',
+  Aspersion = 'Aspersión',
+  Inundacion = 'Inundación'
+}
 
-export const PRIORIDADES = {
-  Alta: "Alta",
-  Media: "Media",
-  Baja: "Baja",
-} as const;
+export enum EPrioridad {
+  Alta,
+  Media,
+  Baja
+}
 
-export const DISTANCIA_SIEMBRA = {
-  Cercana: 62,
-  Media: 70,
-  Lejana: 90,
-} as const;
+export enum EDistanciaSiembra {
+  Cercana = 62,
+  Media = 70,
+  Lejana = 90
+}
+
+export enum ESeed {
+  Maiz = 'Maíz',
+  Trigo = 'Trigo',
+  Soja = 'Soja',
+  Girasol = 'Girasol',
+  Arroz = 'Arroz',
+  Cebada = 'Cebada',
+  Avena = 'Avena'
+}
+
+
+
+

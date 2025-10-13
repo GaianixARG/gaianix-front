@@ -1,5 +1,6 @@
 import { DISTANCIA_SIEMBRA, ORDER_TYPES, ROLES, STATUS } from "../enums";
 import type { IOrder } from "../interfaces";
+import { mockSeeds } from "./seesData";
 
 export const ordersMock: IOrder[] = [
   {
@@ -12,13 +13,12 @@ export const ordersMock: IOrder[] = [
     status: STATUS.Pendiente,
     creator: {
       name: "Juan Perez",
-      id: 1,
-      email: "juan.perez@example.com",
+      id: "1",
       username: "juanp",
       role: ROLES.Administrador,
     },
     siembra: {
-      tipoSemilla: "Maíz",
+      tipoSemilla: mockSeeds[0],
       cantidadSemillasHa: 80000,
       cantidadHectareas: 10,
       fertilizante: "Urea",
@@ -37,13 +37,12 @@ export const ordersMock: IOrder[] = [
     status: STATUS.Pendiente,
     creator: {
       name: "Pedro Lopez",
-      id: 5,
-      email: "pedro.lopez@example.com",
+      id: "5",
       username: "pedrol",
       role: ROLES.Administrador,
     },
     siembra: {
-      tipoSemilla: "Trigo",
+      tipoSemilla: mockSeeds[1],
       cantidadSemillasHa: 60000,
       cantidadHectareas: 15,
       fertilizante: "Fertilizante X",
@@ -62,13 +61,12 @@ export const ordersMock: IOrder[] = [
     status: STATUS.EnCurso,
     creator: {
       name: "Ana Gomez",
-      id: 2,
-      email: "ana.gomez@example.com",
+      id: "2",
       username: "anag",
       role: ROLES.Operario,
     },
     siembra: {
-      tipoSemilla: "Soja",
+      tipoSemilla: mockSeeds[2],
       cantidadSemillasHa: 70000,
       cantidadHectareas: 12,
       fertilizante: "Fertilizante Y",
@@ -87,13 +85,12 @@ export const ordersMock: IOrder[] = [
     status: STATUS.EnCurso,
     creator: {
       name: "Maria Fernandez",
-      id: 3,
-      email: "maria.fernandez@example.com",
+      id: "3",
       username: "mariaf",
       role: ROLES.Operario,
     },
     siembra: {
-      tipoSemilla: "Girasol",
+      tipoSemilla: mockSeeds[0],
       cantidadSemillasHa: 50000,
       cantidadHectareas: 8,
       fertilizante: "Fertilizante Z",
@@ -112,13 +109,12 @@ export const ordersMock: IOrder[] = [
     status: STATUS.Completada,
     creator: {
       name: "Carlos Ruiz",
-      id: 4,
-      email: "carlos.ruiz@example.com",
+      id: "4",
       username: "carlosr",
       role: ROLES.Operario,
     },
     siembra: {
-      tipoSemilla: "Maíz",
+      tipoSemilla: mockSeeds[0],
       cantidadSemillasHa: 80000,
       cantidadHectareas: 10,
       fertilizante: "Fertilizante A",
@@ -137,13 +133,12 @@ export const ordersMock: IOrder[] = [
     status: STATUS.Completada,
     creator: {
       name: "Laura Torres",
-      id: 6,
-      email: "laura.torres@example.com",
+      id: "6",
       username: "laurat",
       role: ROLES.Operario,
     },
     siembra: {
-      tipoSemilla: "Maíz",
+      tipoSemilla: mockSeeds[1],
       cantidadSemillasHa: 80000,
       cantidadHectareas: 10,
       fertilizante: "Fertilizante A",

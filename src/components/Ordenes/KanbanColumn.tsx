@@ -1,23 +1,23 @@
 import type { IOrder } from "../../constants/interfaces";
-import type { TStatus } from "../../constants/types";
 import { FilterIcon, PlusIcon, SortAscIcon } from "lucide-react";
 import OrderCard from "./OrderCard";
 import Button from "../ui/Button";
 import Badge from "../ui/Badge";
-import { useAlert } from "../../context/AlertProvider";
+import { useAlert } from "../../context/AlertContext";
 import { useState } from "react";
 import {
   BG_PER_STATUS_COLOR,
   COLOR_PER_STATUS,
+  STATUS_NAME,
   TEXT_PER_STATUS_COLOR,
 } from "../../constants/conversiones";
-import useButton from "../../hooks/useButton";
+import { EStatus } from "../../constants/enums";
 
 type Props = {
-  status: TStatus;
+  status: EStatus;
   orders: IOrder[];
-  onDropOrder: (orderId: string, newStatus: TStatus) => void;
-  onSelectOrder: (orderId: string, status: TStatus) => void;
+  onDropOrder: (orderId: string, newStatus: EStatus) => void;
+  onSelectOrder: (orderId: string, status: EStatus) => void;
 };
 
 const KanbanColumn = ({
@@ -68,18 +68,9 @@ const KanbanColumn = ({
   const colorStatus = COLOR_PER_STATUS[status];
 
   const claseTextoTituloColumna = `uppercase ${TEXT_PER_STATUS_COLOR[colorStatus]} font-bold me-1`;
-  const bgContainer = `p-4 rounded-xl w-72 shadow-md transition-colors shrink-0 ${
+  const bgContainer = `p-4 rounded-xl shadow-md transition-colors w-full min-w-0 ${
     isActive ? BG_PER_STATUS_COLOR[colorStatus] : "bg-gray-200/50"
   }`;
-
-  const { handleToggleDrawer } = useButton({
-    dataDrawerTarget: "drawer-form",
-  });
-
-  const handleSelectOrder = (orderId: string, status: TStatus) => {
-    onSelectOrder(orderId, status);
-    handleToggleDrawer("open");
-  };
 
   return (
     <div
@@ -95,25 +86,26 @@ const KanbanColumn = ({
             label={orders.length.toFixed(0)}
             className="py-1"
           />
-          <span className={claseTextoTituloColumna}>{status}</span>
+          <span className={claseTextoTituloColumna}>{STATUS_NAME[status]}</span>
         </div>
         <div className="flex items-center gap-1">
           <Button
+            type="button"
             tipo="white"
             className="p-1"
-            onClick={() => handleSelectOrder("", status)}
+            onClick={() => onSelectOrder("", status)}
             title="Crear nueva orden"
           >
             <PlusIcon className="w-4 h-4" />
           </Button>
 
           <Button
+            type="button"
             tipo="white"
             className="p-1"
             onClick={() =>
               showAlert({
-                title: "Ordenar",
-                message: "Funcionalidad en desarrollo.",
+                message: "Ordenar - Funcionalidad en desarrollo.",
                 type: "error",
               })
             }
@@ -123,12 +115,12 @@ const KanbanColumn = ({
           </Button>
 
           <Button
+            type="button"
             tipo="white"
             className="p-1"
             onClick={() =>
               showAlert({
-                title: "Filtrar",
-                message: "Funcionalidad en desarrollo.",
+                message: "Filtrar - Funcionalidad en desarrollo.",
                 type: "error",
               })
             }
@@ -139,19 +131,29 @@ const KanbanColumn = ({
         </div>
       </div>
 
-      <div className="space-y-3 w-full h-full">
+      <div className="
+      overflow-x-auto xl:overflow-x-visible   /* scroll horizontal en mobile */
+      xl:overflow-y-auto                      /* scroll vertical en XL */
+      max-h-[90vh]                             /* limite de altura de la columna, ajustable */
+      p-3
+      snap-x xl:snap-y">
+        <div className="
+        flex flex-row xl:flex-col gap-3
+        min-w-full xl:min-w-0
+        snap-mandatory">
         {orders.length > 0 ? (
           orders.map((order) => (
             <OrderCard
               key={order.id}
               {...order}
               onDragStart={handleDragStart}
-              onClick={() => handleSelectOrder(order.id, status)}
+              onClick={() => onSelectOrder(order.id, status)}
             />
           ))
         ) : (
           <p className="text-xs text-muted-foreground italic">Sin órdenes</p>
-        )}
+          )}
+          </div>
       </div>
     </div>
   );

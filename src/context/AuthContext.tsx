@@ -1,59 +1,14 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { setAuth, getAuth, clearAuth } from "../services/authStorage";
+import { createContext, useContext } from "react";
 import type { IUser } from "../constants/interfaces";
-import { getUser } from "../services/api";
 
 type AuthContextType = {
   isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
+  handleLogin: (username: string, password: string) => void;
+  handleLogout: () => void;
   user: IUser;
 };
 
-const initialUser: IUser = {
-  id: 0,
-  name: "",
-  email: "",
-  username: "",
-  role: "Visualizacion",
-};
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [user, setUser] = useState<IUser>(initialUser);
-
-  useEffect(() => {
-    const savedAuth = getAuth();
-    setIsAuthenticated(savedAuth != null);
-    if (savedAuth) {
-      setUser(savedAuth);
-    }
-  }, []);
-
-  const login = () => {
-    setIsAuthenticated(true);
-    const userData = getUser("");
-    setAuth(userData);
-    setUser(userData);
-    navigate("/dashboard");
-  };
-
-  const logout = () => {
-    setIsAuthenticated(false);
-    clearAuth();
-    navigate("/");
-  };
-
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, user }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

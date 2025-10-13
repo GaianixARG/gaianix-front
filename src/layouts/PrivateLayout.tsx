@@ -9,7 +9,7 @@ const PrivateLayout = ({ children }: Props) => {
   return (
     <ProtectedRoute to="/login">
       <Sidebar />
-      <main className="flex flex-col items-center bg-linear-(--color-background) min-h-screen h-full sm:ml-50 sm:px-4 py-15 min-w-fit">
+      <main className="flex flex-col gap-4 sm:ml-64 h-full flex-1 p-10">
         {children}
       </main>
     </ProtectedRoute>

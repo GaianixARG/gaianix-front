@@ -1,6 +1,6 @@
 import { TractorIcon, LeafIcon, ActivityIcon, DropletIcon } from "lucide-react";
 import type { IDashboard } from "../interfaces";
-import { ORDER_TYPES, STATUS } from "../enums";
+import { EOrderType, EStatus } from "../enums";
 
 export const dashboardMock: IDashboard = {
   summary: [
@@ -44,45 +44,45 @@ export const dashboardMock: IDashboard = {
   orders: [
     {
       id: "o1",
-      type: ORDER_TYPES.Siembra,
-      field: "Lote 1",
-      date: "2025-07-09",
-      status: STATUS.Pendiente,
+      type: EOrderType.Siembra,
+      lote: "Lote 1",
+      dateOfCreation: "2025-07-09",
+      status: EStatus.Pendiente,
     },
     {
       id: "o2",
-      type: ORDER_TYPES.Fertilización,
-      field: "Lote 3",
-      date: "2025-07-08",
-      status: STATUS.EnCurso,
+      type: EOrderType.Fertilizacion,
+      lote: "Lote 3",
+      dateOfCreation: "2025-07-08",
+      status: EStatus.EnCurso,
     },
     {
       id: "o3",
-      type: ORDER_TYPES.Riego,
-      field: "Lote 2",
-      date: "2025-07-07",
-      status: STATUS.Pendiente,
+      type: EOrderType.Cosecha,
+      lote: "Lote 2",
+      dateOfCreation: "2025-07-07",
+      status: EStatus.Pendiente,
     },
     {
       id: "o4",
-      type: ORDER_TYPES.Cosecha,
-      field: "Lote 5",
-      date: "2025-07-06",
-      status: STATUS.Completada,
+      type: EOrderType.Cosecha,
+      lote: "Lote 5",
+      dateOfCreation: "2025-07-06",
+      status: EStatus.Completada,
     },
     {
       id: "o5",
-      type: ORDER_TYPES.Fertilización,
-      field: "Lote 7",
-      date: "2025-07-05",
-      status: STATUS.EnCurso,
+      type: EOrderType.Fertilizacion,
+      lote: "Lote 7",
+      dateOfCreation: "2025-07-05",
+      status: EStatus.EnCurso,
     },
     {
       id: "o6",
-      type: ORDER_TYPES.Cosecha,
-      field: "Lote 4",
-      date: "2025-07-04",
-      status: STATUS.Pendiente,
+      type: EOrderType.Cosecha,
+      lote: "Lote 4",
+      dateOfCreation: "2025-07-04",
+      status: EStatus.Pendiente,
     },
   ],
 };

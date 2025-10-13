@@ -4,9 +4,9 @@ import useCalendar from "../../../hooks/useCalendar";
 
 type Props = {
   viewDate: Date;
-  selectedDate: string;
+  selectedDate: Date;
   setViewDate: React.Dispatch<React.SetStateAction<Date>>;
-  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
   setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
   onChange?: (date: string) => void;
 };
@@ -19,7 +19,7 @@ const Calendar = ({
   setShowPicker,
   onChange,
 }: Props) => {
-  const { formatDate, dayNames } = useCalendar();
+  const { muestraFecha, formatToValue, muestraMes, dayNames } = useCalendar();
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
@@ -33,9 +33,8 @@ const Calendar = ({
   }
 
   const handleDateClick = (date: Date) => {
-    const formatted = formatDate(date);
-    setSelectedDate(formatted);
-    if (onChange) onChange(formatted);
+    setSelectedDate(date);
+    if (onChange) onChange(formatToValue(date));
     setShowPicker(false);
   };
 
@@ -56,10 +55,7 @@ const Calendar = ({
           <ChevronLeft className="w-4 h-4" />
         </button>
         <span className="text-sm font-bold uppercase">
-          {viewDate.toLocaleDateString("es-AR", {
-            month: "long",
-            year: "numeric",
-          })}
+          {muestraMes(viewDate)}
         </span>
         <button
           onClick={() => changeMonth(1)}
@@ -80,8 +76,8 @@ const Calendar = ({
             key={`day_index_${i}`}
             className={`rounded px-0 py-2 transition-colors text-xs ${
               day ? "hover:bg-primary-light/70" : ""
-            } ${
-              day && formatDate(day) === selectedDate
+              } ${
+              day && muestraFecha(day) === muestraFecha(selectedDate)
                 ? "bg-primary text-white"
                 : "text-gray-800"
             }`}

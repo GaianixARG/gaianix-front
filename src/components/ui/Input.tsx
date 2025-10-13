@@ -26,7 +26,7 @@ const Input = ({
         }`}
         onChange={handleChange}
       />
-      {iconRight && (
+      {iconRight != null && (
         <span className="absolute right-3 text-accent-light pointer-events-none flex items-center text-sm">
           {iconRight}
         </span>

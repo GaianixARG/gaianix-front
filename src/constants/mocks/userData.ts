@@ -1,6 +1,6 @@
-import type { UserData } from "./interfaces";
+import type { IUser } from "../interfaces";
 
-export const USUARIO_SESION: UserData = {
+export const USUARIO_SESION: IUser = {
   id: 1,
   name: "Francisco",
   email: "fran@gaianix.com",

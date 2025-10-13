@@ -21,7 +21,7 @@ const Loader = ({
   const clase = `animate-spin ${className} ${claseTexto}`;
 
   return (
-    isLoading && (
+    (isLoading ?? false) && (
       <div
         role="status"
         className={

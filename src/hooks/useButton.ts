@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import type { TFunctionToggle } from "../constants/types";
 
 type TargetButton = {
@@ -14,8 +14,8 @@ const useButton = ({
   dataDrawerTarget,
   dataDropdownTarget,
 }: TargetButton) => {
-  const handleToggleSidebar = (functionToggle?: TFunctionToggle) => {
-    if (dataSidebarTarget) {
+  const handleToggleSidebar = useCallback((functionToggle?: TFunctionToggle) => {
+    if (dataSidebarTarget != null) {
       const sidebar = document.getElementById(dataSidebarTarget);
       if (sidebar) {
         switch (functionToggle) {
@@ -34,10 +34,10 @@ const useButton = ({
         }
       }
     }
-  };
+  }, [dataSidebarTarget]);
 
   const handleToggleDrawer = (functionToggle?: TFunctionToggle) => {
-    if (dataDrawerTarget) {
+    if (dataDrawerTarget != null) {
       const drawer = document.getElementById(dataDrawerTarget);
       if (drawer) {
         switch (functionToggle) {
@@ -59,7 +59,7 @@ const useButton = ({
   };
 
   const handleOpenDropdown = () => {
-    if (dataDropdownTarget) {
+    if (dataDropdownTarget != null) {
       const dropdown = document.getElementById(dataDropdownTarget);
       if (dropdown) {
         dropdown.classList.toggle("hidden");
@@ -68,7 +68,7 @@ const useButton = ({
   };
 
   useEffect(() => {
-    if (dataSidebarTarget && idButton) {
+    if (dataSidebarTarget != null && idButton != null) {
       document.body.addEventListener("click", (event) => {
         const sidebar = document.getElementById(dataSidebarTarget);
         const button = document.getElementById(idButton);
@@ -82,7 +82,7 @@ const useButton = ({
         }
       });
     }
-  }, []);
+  }, [dataSidebarTarget, handleToggleSidebar, idButton]);
 
   return {
     handleToggleSidebar,

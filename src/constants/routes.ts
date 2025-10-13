@@ -25,7 +25,7 @@ const LABEL_PER_COMPONENT: DicRoute = {
 export const PRIVATE_ROUTES = [
   { path: "/dashboard", label: "Dashboard", enabled: true },
   { path: "/siembra", label: "Siembra", enabled: true },
-  { path: "/fertilizacion", label: "Fertilización", enabled: false },
+  { path: "/fertilizacion", label: "Fertilización", enabled: true },
   { path: "/riego", label: "Riego", enabled: false },
   { path: "/cosecha", label: "Cosecha", enabled: false },
 ];

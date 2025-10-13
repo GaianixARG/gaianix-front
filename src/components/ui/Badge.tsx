@@ -10,7 +10,7 @@ type Props = {
 const Badge = ({ label, color, className }: Props) => {
   const styleBadge = BADGESTYLE_X_STATUS[color];
   const badgeClassName = `text-xs px-2 rounded-full w-fit ${styleBadge} ${
-    className || ""
+    className ?? ""
   }`;
 
   return <p className={badgeClassName}>{label}</p>;

@@ -1,20 +1,21 @@
-import type { IOrder } from "../../constants/interfaces";
+import type { IOrderTableDashboard } from "../../constants/interfaces";
 import Table from "../ui/Table";
 import Badge from "../ui/Badge";
-import { COLOR_PER_STATUS } from "../../constants/conversiones";
+import { COLOR_PER_STATUS, STATUS_NAME } from "../../constants/conversiones";
 
 type Props = {
-  data: IOrder[];
+  data: IOrderTableDashboard[];
 };
 
 const columnsOrderTable = [
   { key: "type", label: "Tipo" },
-  { key: "field", label: "Lote" },
+  { key: "lote", label: "Lote" },
+  { key: "dateOfCreation", label: "Fecha Alta" },
   {
     key: "status",
     label: "Estado",
-    displayItem: ({ status }: IOrder) => (
-      <Badge color={COLOR_PER_STATUS[status]} label={status} className="py-1" />
+    displayItem: ({ status }: IOrderTableDashboard) => (
+      <Badge color={COLOR_PER_STATUS[status]} label={STATUS_NAME[status]} className="py-1" />
     ),
   },
 ];

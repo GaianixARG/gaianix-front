@@ -12,11 +12,11 @@ export default function AppRouter() {
     <Suspense>
       <GlobalLoader />
       <Routes>
-        {PUBLIC_ROUTES_COMPONENT.map((el) => (
-          <Route key={el.path} path={el.path} element={<el.component />} />
+        {PUBLIC_ROUTES_COMPONENT.map(({path, component: Component}) => (
+          <Route key={path} path={path} element={<Component />} />
         ))}
-        {PRIVATE_ROUTES_COMPONENT.map((el) => (
-          <Route key={el.path} path={el.path} element={<el.component />} />
+        {PRIVATE_ROUTES_COMPONENT.map(({path, component: Component}) => (
+          <Route key={path} path={path} element={<Component />} />
         ))}
         <Route
           path={NOT_FOUND_ROUTE_COMPONENT.path}

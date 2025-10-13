@@ -28,7 +28,7 @@ const TabHeaderItem = ({
       if (p.id === tabId) p.removeAttribute("hidden");
       else p.setAttribute("hidden", "true");
     });
-    if (onClick) onClick();
+    if (onClick != null) onClick();
   };
 
   return (

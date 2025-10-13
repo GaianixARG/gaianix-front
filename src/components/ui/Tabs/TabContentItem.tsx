@@ -15,11 +15,11 @@ const TabContentItem = ({
 }: TabContentProps) => {
   return (
     <div
-      className={`p-4 ${className}`}
+      className={`p-4 ${className ?? ""}`}
       id={id}
       role="tabpanel"
       aria-labelledby={`${id}-tab`}
-      hidden={!active}
+      hidden={!(active ?? false)}
     >
       {children}
     </div>

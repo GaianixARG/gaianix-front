@@ -1,4 +1,4 @@
-import { useEffect, useId } from "react";
+import { useId } from "react";
 import { CLASE_X_BOTON } from "../../constants/conversiones";
 import type { TBoton, TFunctionToggle } from "../../constants/types";
 import useButton from "../../hooks/useButton";

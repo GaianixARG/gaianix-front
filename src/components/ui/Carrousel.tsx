@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import IconRounded from "./IconRounded";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Props<T> = {
   id: string;
@@ -26,9 +26,10 @@ const Carrousel = <T,>({
 }: Props<T>) => {
   const [activeItem, setActiveItem] = useState(defaultIndex);
 
-  const onNext = () => {
+  const onNext = useCallback(() => {
     setActiveItem((prev) => (prev + 1) % data.length);
-  };
+  }, [data.length]);
+  
   const onPrev = () => {
     setActiveItem((prev) => (prev === 0 ? data.length - 1 : prev - 1));
   };
@@ -36,6 +37,11 @@ const Carrousel = <T,>({
   const slideTo = (index: number) => {
     setActiveItem(index);
   };
+
+  const classNameItem = useCallback((index: number) =>
+    `${
+      index === activeItem ? transitionActiveItem : transitionInactiveItem
+    } flex items-center justify-center`, [activeItem]);
 
   useEffect(() => {
     const items = document.querySelectorAll(`[data-carousel-item]`);
@@ -46,7 +52,7 @@ const Carrousel = <T,>({
         index === activeItem ? "active" : ""
       );
     });
-  }, [activeItem]);
+  }, [activeItem, classNameItem]);
 
   useEffect(() => {
     if (tipo == "slide") {
@@ -55,12 +61,8 @@ const Carrousel = <T,>({
       }, interval);
       return () => clearInterval(intervalId);
     }
-  }, [interval]);
+  }, [interval, onNext, tipo]);
 
-  const classNameItem = (index: number) =>
-    `${
-      index === activeItem ? transitionActiveItem : transitionInactiveItem
-    } flex items-center justify-center`;
 
   return (
     <div id={id} className="relative w-full" data-carousel={tipo}>

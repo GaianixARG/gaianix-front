@@ -21,15 +21,15 @@ const Table = <T,>({ columns, data, onClick }: Props<T>) => {
     { key, displayItem }: TableColumn<T>,
     item: TableData<T>
   ) => {
-    return item && item[key]
-      ? displayItem
-        ? displayItem(item)
-        : item[key]
-      : "";
+    if (!item) return "";
+    if (item[key] == null && !displayItem) return "";
+    if (displayItem) return displayItem(item);
+
+    return item[key] ?? "";
   };
 
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div className="relative overflow-x-auto shadow-md rounded-lg w-full">
       <table
         id="selection-table"
         className="w-full text-sm text-left text-accent"
@@ -37,7 +37,7 @@ const Table = <T,>({ columns, data, onClick }: Props<T>) => {
         <thead className="text-sm uppercase bg-accent-light text-bold">
           <tr>
             {columns.map(({ key, label, format = "" }) => (
-              <th key={`th-${key}`} className="px-6 py-3">
+              <th key={`th-${key}`} className="p-4">
                 <span
                   className="flex items-center cursor-pointer"
                   data-format={format}
@@ -59,7 +59,7 @@ const Table = <T,>({ columns, data, onClick }: Props<T>) => {
               {columns.map((col) => (
                 <td
                   key={`td-${index}-${col.key}`}
-                  className="px-6 py-4 whitespace-nowrap"
+                  className="p-3 whitespace-nowrap"
                 >
                   {displayValue(col, item)}
                 </td>

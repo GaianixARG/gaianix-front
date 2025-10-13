@@ -1,17 +1,25 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonLoading from "../components/ui/ButtonLoading";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState("")
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const { login } = useAuth();
+  const { handleLogin, isAuthenticated } = useAuth();
+  useEffect(() => {
+    if (isAuthenticated) navigate("/dashboard")
+  }, [isAuthenticated, navigate])
 
   return (
     <PublicLayout>
@@ -27,8 +35,10 @@ const Login = () => {
           <input
             type="text"
             id="username"
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-light"
             required
+            defaultValue={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div className="mb-6">
@@ -39,8 +49,10 @@ const Login = () => {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-light"
               required
+              defaultValue={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
               onClick={togglePasswordVisibility}
@@ -58,7 +70,7 @@ const Login = () => {
           isLoading={false}
           className="w-full"
           text="Login"
-          onClick={login}
+          onClick={() => handleLogin(username, password)}
         />
       </form>
     </PublicLayout>

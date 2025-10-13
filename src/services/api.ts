@@ -1,20 +1,62 @@
-import { USUARIO_SESION } from "../constants/mocks/userData";
-import type { IDashboard, IOrder, IUser } from "../constants/interfaces";
-import { dashboardMock } from "../constants/mocks/dashboardData";
-import { ordersMock } from "../constants/mocks/ordersData";
+import type { TResponseApi } from "../constants/types";
+import { authService } from "./authService";
 
-export const getUser = (token: string): IUser => {
-  return USUARIO_SESION;
-};
+const noCheckEndpoints401ToRedirect = ["/user/login", "/user/me"]
 
-export const getDashboardData = (): Promise<IDashboard> => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(dashboardMock), 500);
-  });
-};
+export class Api {
+  private baseUrl: string;
 
-export const getOrders = (): Promise<IOrder[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(ordersMock), 500);
-  });
-};
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
+
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<TResponseApi<T>> {
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+      credentials: "include",
+      ...options,
+    });
+
+    if (response.status === 401 && !noCheckEndpoints401ToRedirect.includes(endpoint)) {
+      await authService.logout()
+      window.location.href = "/login"
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message ?? "Error en la petición");
+    }
+
+    return response.json();
+  }
+
+  get<T>(endpoint: string): Promise<TResponseApi<T>> {
+    return this.request(endpoint, { method: "GET" });
+  }
+
+  post<T>(endpoint: string, body: any): Promise<TResponseApi<T>> {
+    return this.request(endpoint, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
+
+  put<T>(endpoint: string, body: any): Promise<TResponseApi<T>> {
+    return this.request(endpoint, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    });
+  }
+
+  delete<T>(endpoint: string): Promise<TResponseApi<T>> {
+    return this.request(endpoint, { method: "DELETE" });
+  }
+}
+
+export const api = new Api("http://localhost:3000/api");

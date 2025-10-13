@@ -1,4 +1,3 @@
-import React from "react";
 import { LogOut, Menu } from "lucide-react";
 import Button from "../Button";
 import { useAuth } from "../../../context/AuthContext";
@@ -6,8 +5,8 @@ import logo from "../../../assets/images/logo.png";
 import { PRIVATE_ROUTES_ICONS } from "../../../constants/routes";
 import NavTab from "./NavTab";
 
-const Sidebar2 = () => {
-  const { logout, user, isAuthenticated } = useAuth();
+const Sidebar = () => {
+  const { handleLogout, user, isAuthenticated } = useAuth();
   return (
     <header className="min-w-full">
       <div className="bg-accent p-2 sm:p-0 sm:hidden flex items-center">
@@ -35,7 +34,7 @@ const Sidebar2 = () => {
               Gaianix
             </span>
           </a>
-          {isAuthenticated && user && (
+          {isAuthenticated && (
             <p className="p-2 mb-5 bg-primary/40 rounded-lg text-white text-center">
               {user.name}
             </p>
@@ -54,7 +53,7 @@ const Sidebar2 = () => {
                   label="Desconectarse"
                   enabled={isAuthenticated}
                   icon={LogOut}
-                  onClick={logout}
+                  onClick={handleLogout}
                 />
               </li>
             </ul>
@@ -65,4 +64,4 @@ const Sidebar2 = () => {
   );
 };
 
-export default Sidebar2;
+export default Sidebar;

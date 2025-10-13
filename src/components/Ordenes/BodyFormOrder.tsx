@@ -1,6 +1,12 @@
+import { EPrioridad } from "../../constants/enums";
 import type { TFormDetailsOrder } from "../../constants/types";
+import { getArrayFromEnum } from "../../constants/utils";
+import useInfoCampos from "../../hooks/useInfoCampos";
+import Select from "../ui/Select";
 
 const BodyFormOrder = ({ order, onChangeValue }: TFormDetailsOrder) => {
+  const { lotes } = useInfoCampos();
+
   return (
     <>
       <div className="mb-3">
@@ -20,22 +26,35 @@ const BodyFormOrder = ({ order, onChangeValue }: TFormDetailsOrder) => {
           onChange={(e) => onChangeValue("title", e.target.value)}
         />
       </div>
-      <div className="mb-3">
-        <label
-          htmlFor="lot"
-          className="block mb-2 text-sm font-medium text-accent-light"
-        >
-          Lote
-        </label>
-        <input
-          type="text"
-          id="lot"
-          className="text-sm rounded-lg block w-full p-2.5 border bg-gray-700 border-gray-600 placeholder-accent-light text-white focus-visible:ring-1 focus-visible:ring-primary-light focus-visible:outline-none"
-          placeholder="Ej: Lote 1"
-          required
-          defaultValue={order.lote}
-          onChange={(e) => onChangeValue("lote", e.target.value)}
-        />
+      <div className="flex gap-4 mb-3">
+        <div className="flex-1">
+          <label
+            htmlFor={`lote_${order.id}`}
+            className="block text-sm font-medium text-accent-light">
+            Lote
+          </label>
+          <Select
+            id={`lote_${order.id}`}
+            options={lotes.map(x => ({ value: x.id, label: x.codigo })) ?? []}
+            addOptionEmpty
+            defaultValue={order.lote.id}
+            required
+            onChange={(value) => onChangeValue("lote.id", value)}
+          />
+        </div>
+
+        <div className="flex-1">
+          <label htmlFor={`prioridad_${order.id}`} className="block text-sm font-medium text-accent-light">
+            Prioridad
+          </label>
+          <Select
+            id={`prioridad_${order.id}`}
+            options={getArrayFromEnum(EPrioridad)}
+            defaultValue={order.prioridad}
+            required
+            onChange={(value) => onChangeValue("prioridad", value)}
+          />
+        </div>
       </div>
     </>
   );

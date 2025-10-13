@@ -24,14 +24,12 @@ const DatePicker = ({
   required = false,
   onChange,
 }: Props) => {
-  const { formatDate } = useCalendar();
+  const { muestraFecha, stringToDate } = useCalendar();
 
   const today = new Date();
-  const defaultDate = defaultValue ? new Date(defaultValue) : today;
+  const defaultDate = defaultValue != null ? stringToDate(defaultValue) : today;
 
-  const [selectedDate, setSelectedDate] = useState<string>(
-    formatDate(defaultDate)
-  );
+  const [selectedDate, setSelectedDate] = useState<Date>(defaultDate);
   const [viewDate, setViewDate] = useState<Date>(defaultDate);
 
   const [showPicker, setShowPicker] = useState(false);
@@ -75,11 +73,11 @@ const DatePicker = ({
   }, [showPicker]);
 
   const classLabel = `block text-sm font-medium text-accent-light ${
-    classNameLabel ? classNameLabel : ""
+    classNameLabel ?? ""
   }`;
 
   return (
-    <div ref={ref} className={"relative " + (className || "")}>
+    <div ref={ref} className={"relative " + (className ?? "")}>
       <label htmlFor={id} className={classLabel}>
         {label}
       </label>
@@ -93,15 +91,15 @@ const DatePicker = ({
           type="text"
           required={required}
           readOnly
-          value={selectedDate}
+          value={muestraFecha(selectedDate)}
           onClick={() => setShowPicker(!showPicker)}
-          placeholder={placeholder || "Seleccionar fecha"}
+          placeholder={placeholder ?? "Seleccionar fecha"}
           className="block w-full ps-10 p-2.5 text-sm rounded-lg bg-gray-700 placeholder-accent-light text-white focus-visible:ring-1 focus-visible:ring-primary-light focus-visible:outline-none cursor-pointer"
         />
       </div>
       {showPicker && (
         <div
-          className={`absolute z-50 w-full rounded-lg border bg-white shadow-lg ${
+          className={`absolute z-50 w-xs rounded-lg border bg-white shadow-lg ${
             dropdownDirection === "down" ? "mt-2 top-full" : "bottom-full mb-2"
           }`}
         >

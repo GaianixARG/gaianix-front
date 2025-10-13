@@ -1,7 +1,7 @@
 import { BugOff, ChartPie, Droplets, Sprout, Tractor } from "lucide-react";
-import type { TBoton, TColors, TStatus, TStatusColor } from "./types";
+import type { TBoton, TColors, TStatusColor } from "./types";
 import type { DicIcon, DicSize } from "./interfaces";
-import { STATUS } from "./enums";
+import { EOrderType, EPrioridad, EStatus } from "./enums";
 
 export const LABEL_PER_ICON: DicIcon = {
   Dashboard: ChartPie,
@@ -94,8 +94,26 @@ export const ALERT_PER_STATUS_COLOR: Record<TStatusColor, string> = {
   white: "bg-white/20 text-white border border-white",
 };
 
-export const COLOR_PER_STATUS: Record<TStatus, TColors> = {
-  [STATUS.EnCurso]: "info",
-  [STATUS.Pendiente]: "warning",
-  [STATUS.Completada]: "success",
+export const COLOR_PER_STATUS: Record<EStatus, TColors> = {
+  [EStatus.EnCurso]: "info",
+  [EStatus.Pendiente]: "warning",
+  [EStatus.Completada]: "success",
 };
+
+export const STATUS_NAME: Record<EStatus, string> = {
+  [EStatus.Pendiente]: "Pendiente",
+  [EStatus.EnCurso]: "En Curso",
+  [EStatus.Completada]: "Completado"
+}
+
+export const ORDER_TYPE_NAME: Record<EOrderType, string> = {
+  [EOrderType.Siembra]: "Siembra",
+  [EOrderType.Fertilizacion]: "Fertilización",
+  [EOrderType.Cosecha]: "Cosecha"
+}
+
+export const PRIORIDAD_NAME: Record<EPrioridad, string> = {
+  [EPrioridad.Alta]: "Alta",
+  [EPrioridad.Media]: "Media",
+  [EPrioridad.Baja]: "Baja"
+}

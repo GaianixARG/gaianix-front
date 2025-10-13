@@ -43,6 +43,28 @@
   --breakpoint-xs: 350px;
 }
 
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: var(--color-gray-100);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-accent-light);
+    border-radius: 100vh;
+    border: 3px solid #f6f7ed;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-300);
+  }
+}
+
 /* CSS puro */
 button {
   cursor: pointer;
@@ -51,4 +73,12 @@ button {
 button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+#root {
+  --tw-gradient-position: var(--color-background);
+  background-image: linear-gradient(var(--tw-gradient-stops,var(--color-background)));
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }

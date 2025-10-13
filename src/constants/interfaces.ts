@@ -1,119 +1,166 @@
-import type { LucideIcon, LucideProps } from "lucide-react";
+import type { LucideIcon, LucideProps } from "lucide-react"
 import type {
-  TDistanciaSiembra,
-  TOrder,
-  TPrioridad,
-  TRiego,
-  TRol,
-  TStatus,
-} from "./types";
-import type { JSX, LazyExoticComponent } from "react";
+  MyOmit,
+} from "./types"
+import type { JSX, LazyExoticComponent } from "react"
+import type { EDistanciaSiembra, EOrderType, EPrioridad, ESeed, EStatus } from "./enums"
 
 // Data
+//#region Usuario
+export interface IRol {
+  id: string
+  name: string
+}
 
-export type IUser = {
-  id: number;
-  name: string;
-  email: string;
-  username: string;
-  role: TRol;
-};
+export interface IUser {
+  id: string
+  name: string
+  role: IRol
+  username: string
+}
+//#endregion
 
+//#region Dashboard
 export interface IDashboard {
-  summary: Array<ISummaryItem>;
-  orders: Array<IOrder>;
-  recentActivities: Array<IRecentActivity>;
+  summary: Array<ISummaryItem>
+  orders: IOrderTableDashboard[]
+  recentActivities: Array<IRecentActivity>
+}
+
+export interface IOrderTableDashboard {
+  id: string
+  type: EOrderType
+  lote: string
+  dateOfCreation: string
+  status: EStatus
 }
 
 export interface ISummaryItem {
-  label: string;
-  value: number;
-  icon: LucideIcon;
+  label: string
+  value: number
+  icon: LucideIcon
 }
 
+export interface IRecentActivity {
+  id: string
+  title: string
+  description: string
+  date: Date
+}
+//#endregion
+
+//#region Campo
+interface ICampo {
+  id: string
+  nombre: string
+}
+
+export interface ILote {
+  id: string
+  codigo: string
+  campo: ICampo
+}
+//#endregion
+
+//#region Fertilizer
+export interface IFertilizer {
+  id: string
+  name: string
+}
+//#endregion
+
+//#region Orders
 export interface IOrderBase {
-  id: string;
-  codigo: string;
-  type: TOrder;
-  title: string;
-  lote: string;
-  dateOfCreation: string;
-  status: TStatus;
-  creator: IUser;
+  id: string
+  codigo: string
+  title: string
+  type: EOrderType
+  status: EStatus
+  lote: ILote
+  dateOfCreation: string
+  creator: IUser
+  prioridad: EPrioridad
+}
+
+export type IOrderBaseDetails = Omit<IOrderBase, "creator" | "dateOfCreation">
+
+//#region Siembra
+interface IDatosSemilla {
+  id: string
+  semilla: ISeed
+  cantidadSemillasHa: number
+}
+
+interface IDatosSiembra {
+  id: string
+  fechaMaxSiembra: string
+  distanciaSiembra: EDistanciaSiembra
+  cantidadHectareas: number
+  datosSemilla: IDatosSemilla
+  fertilizante: IFertilizer
+}
+
+export interface IOrderSiembra extends IOrderBase {
+  type: EOrderType.Siembra
+  siembra: IDatosSiembra
+}
+
+//#endregion
+
+export interface IOrderFertilizacion extends IOrderBase {
+  type: EOrderType.Fertilizacion
+  fertilizacion: {
+    fertilizante: string
+    dosisKgHa: number
+    metodo: string
+  }
+}
+
+export interface IOrderCosecha extends IOrderBase {
+  type: EOrderType.Cosecha
+  cosecha: {
+    fechaCosecha: string
+    rendimientoEstimado: number
+    maquinaria: string
+    humedad: number
+  }
 }
 
 export type IOrder =
   | IOrderSiembra
-  | IOrderRiego
   | IOrderFertilizacion
-  | IOrderCosecha;
+  | IOrderCosecha
 
-export interface IOrderSiembra extends IOrderBase {
-  type: "Siembra";
-  siembra: {
-    fechaMaxSiembra: string;
-    prioridad: TPrioridad;
-    tipoSemilla: string;
-    cantidadSemillasHa: number;
-    cantidadHectareas: number;
-    fertilizante: string;
-    distanciaSiembra: TDistanciaSiembra;
-  };
-}
+export type IOrderDetails = MyOmit<IOrder, "creator" | "dateOfCreation">
 
-export interface IOrderRiego extends IOrderBase {
-  type: "Riego";
-  riego: {
-    metodo: TRiego;
-    cantidadMm: number;
-    horas: number;
-  };
-}
+//#endregion
 
-export interface IOrderFertilizacion extends IOrderBase {
-  type: "Fertilización";
-  fertilizacion: {
-    fertilizante: string;
-    dosisKgHa: number;
-    metodo: string;
-  };
+//#region Semillas
+export interface ISeed {
+  id: string
+  name: string
+  type: ESeed
 }
-
-export interface IOrderCosecha extends IOrderBase {
-  type: "Cosecha";
-  cosecha: {
-    fechaCosecha: string;
-    rendimientoEstimado: number;
-    maquinaria: string;
-    humedad: number;
-  };
-}
-
-export interface IRecentActivity {
-  id: string;
-  title: string;
-  description: string;
-  date: Date;
-}
+//#endregion
 
 export interface IModule {
-  label: string;
-  to: string;
-  icon: LucideIcon;
+  label: string
+  to: string
+  icon: LucideIcon
 }
 
 // Diccionarios
 
 export interface DicRoute {
-  [key: string]: LazyExoticComponent<() => JSX.Element>;
+  [key: string]: LazyExoticComponent<() => JSX.Element>
 }
 
 export interface DicIcon {
   [key: string]: React.ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
-  >;
+  >
 }
 
 export interface DicSize {
-  [key: string]: number;
+  [key: string]: number
 }

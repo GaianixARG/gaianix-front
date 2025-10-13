@@ -1,23 +1,7 @@
-// armar alert provider
-import React, { createContext, useContext, useState } from "react";
+import { useState } from "react";
+import type { FShowAlert, TAlert } from "../constants/types";
+import { AlertContext } from "../context/AlertContext";
 import Alert from "../components/ui/Alert";
-import type {
-  FShowAlert,
-  TAlert,
-  TAlertContextProvider,
-} from "../constants/types";
-
-const AlertContext = createContext<TAlertContextProvider | undefined>(
-  undefined
-);
-
-export const useAlert = () => {
-  const context = useContext(AlertContext);
-  if (!context) {
-    throw new Error("useAlert must be used within an AlertProvider");
-  }
-  return context;
-};
 
 export const AlertProvider = ({ children }: { children: React.ReactNode }) => {
   const [alerts, setAlerts] = useState<Array<TAlert>>([]);

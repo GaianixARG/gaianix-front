@@ -16,8 +16,16 @@ export default tseslint.config([
       reactRefresh.configs.vite,
     ],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 'latest',
       globals: globals.browser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: "./tsconfig.json"
+      },
     },
+    rules: {
+      "@typescript-eslint/strict-boolean-expressions": "error",
+      "@typescript-eslint/no-explicit-any": ["off"]
+    }
   },
 ])
