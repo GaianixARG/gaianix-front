@@ -1,66 +1,77 @@
-import { useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { IUser } from "../constants/interfaces";
-import { useAlert } from "../context/AlertContext";
 import { authService } from "../services/authService";
 import { AuthContext } from "../context/AuthContext";
+import useAlert from "../hooks/context/useAlert";
+import { useNavigate } from "react-router-dom";
 
 const initialUser: IUser = {
   id: "",
   name: "",
   username: "",
-  role: "Visualizacion",
+  role: {
+    id: "",
+    name: ""
+  },
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const {showAlert} = useAlert();
+  const navigate = useNavigate()
+  const { showAlert } = useAlert();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<IUser>(initialUser);
 
-  const handleSetSession = (user: IUser, goTo: string) => {
-    setIsAuthenticated(user.id !== "");
-    setUser(user);
-    window.location.href = goTo
-  }
+  const handleSetSession =  useCallback((userSession: IUser, goTo: string) => {
+    console.log(userSession)
+    setIsAuthenticated(userSession.id !== "");
+    setUser(userSession);
+    navigate(goTo)
+  }, [navigate])
 
-  useEffect(() => {
-    let mounted = true;
-    authService.me()
-      .then((res) => {
-        if (mounted) {
-          setIsAuthenticated(true);
-          setUser(res.data);
-        }
-      })
-      .catch(() => {
-        if (mounted) {
-          setIsAuthenticated(false);
-          setUser(initialUser);
-        }
-      });
-    return () => { mounted = false };
-  }, []);
+  // useEffect(() => {
+  //   let mounted = true;
+  //   authService.me()
+  //     .then((res) => {
+  //       if (mounted) {
+  //         setIsAuthenticated(true);
+  //         setUser(res.data);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       if (mounted) {
+  //         setIsAuthenticated(false);
+  //         setUser(initialUser);
+  //       }
+  //     });
+  //   return () => { mounted = false };
+  // }, []);
 
-  const handleLogin = async (username: string, password: string) => {
+  const handleLogin = useCallback(async (username: string, password: string) => {
     try {
       const userData = await authService.login(username, password);
       handleSetSession(userData.data.user, "/dashboard")
-    } catch (err: any) {
+    } catch {
       showAlert({
         type: "error",
-        message: err.message,
-        title: "Error al conectarse: "
+        message: "Error al conectarse: "
       });
     }
-  };
+  }, [showAlert, handleSetSession])
 
-
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     await authService.logout();
     handleSetSession(initialUser, "/login")
-  };
+  }, [handleSetSession])
+
+  const contextValue = useMemo(() => ({
+    isAuthenticated,
+      handleLogin,
+      handleLogout,
+      user
+  }), [handleLogin, handleLogout, isAuthenticated, user])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, handleLogin, handleLogout, user }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

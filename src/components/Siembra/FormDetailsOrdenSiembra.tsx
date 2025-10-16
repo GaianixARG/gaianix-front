@@ -6,10 +6,10 @@ import Select from "../ui/Select";
 import { getArrayFromEnum } from "../../constants/utils";
 import type { TFormDetailsOrder } from "../../constants/types";
 import useSeeds from "../../hooks/useSeeds";
-import { useLoading } from "../../context/LoadingContext";
-import { useAlert } from "../../context/AlertContext";
 import { EDistanciaSiembra } from "../../constants/enums";
 import useFertilizers from "../../hooks/useFertilizers";
+import { useLoading } from "../../hooks/context/useLoading";
+import useAlert from "../../hooks/context/useAlert";
 
 const FormDetailsOrdenSiembra = ({
   order,

@@ -24,7 +24,7 @@ const useFertilizers = (setLoading: FLoading, showAlert: FShowAlert) => {
         setFertilizers((prev) => prev.filter((s) => s.id !== id));
         showAlert({
           type: "success",
-          message: "Fertilizante eliminada correctamente!",
+          message: "Fertilizante eliminado correctamente!",
         })
       })
       .catch((err) => {
@@ -36,13 +36,13 @@ const useFertilizers = (setLoading: FLoading, showAlert: FShowAlert) => {
       .finally(() => setLoading(false))
   };
 
-  const createNewSeed = (fertilizer: IFertilizer) => {
+  const createNewFertilizer = (fertilizer: IFertilizer) => {
     fertilizerService.create(fertilizer)
-        .then((res) => {
+      .then((res) => {
           setFertilizers((prev) => [...prev, res.data]);
           showAlert({
             type: "success",
-            message: `Fertilizante ${res.data.name} creada correctamente`,
+            message: `Fertilizante ${res.data.name} creado correctamente`,
           })
       })
       .catch((err) => {
@@ -54,19 +54,18 @@ const useFertilizers = (setLoading: FLoading, showAlert: FShowAlert) => {
       .finally(() => setLoading(false))
   }
 
-  const updateSeed = (id: string, fertilizer: IFertilizer) => {
+  const updateFertilizer = (id: string, fertilizer: IFertilizer) => {
     fertilizerService.update(id, fertilizer)
-        .then((res) => {
-          setFertilizers((prev) => prev.map((s) => (s.id === fertilizer.id ? res.data : s)));
+      .then(() => {
           showAlert({
             type: "success",
-            message: "Fertilizante actualizada correctamente!",
+            message: "Fertilizante actualizado correctamente!",
           })
       })
-      .catch((err) => {
+      .catch(() => {
         showAlert({
           type: "error",
-          message: err.message
+          message: "Error al actualizar el fertilizante"
         })
       })
       .finally(() => setLoading(false))
@@ -74,10 +73,9 @@ const useFertilizers = (setLoading: FLoading, showAlert: FShowAlert) => {
 
   const handleSave = (fertilizer: IFertilizer) => {
     if (editingFertilizer.id !== "") {
-      updateSeed(editingFertilizer.id, fertilizer)
+      updateFertilizer(editingFertilizer.id, fertilizer)
     } else {
-      // create
-      createNewSeed(fertilizer)
+      createNewFertilizer(fertilizer)
     }
   };
 
@@ -102,6 +100,7 @@ const useFertilizers = (setLoading: FLoading, showAlert: FShowAlert) => {
   return {
     fertilizers,
     editingFertilizer,
+    setEditingFertilizer,
     handleCreate,
     handleEdit,
     handleDelete,

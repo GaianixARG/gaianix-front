@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import ButtonLoading from "../components/ui/ButtonLoading";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
-import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/context/useAuth";
 
 const Login = () => {
   const navigate = useNavigate()

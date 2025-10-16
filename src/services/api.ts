@@ -1,7 +1,8 @@
+import { EHttpStatusCode } from "../constants/enums";
 import type { TResponseApi } from "../constants/types";
 import { authService } from "./authService";
 
-const noCheckEndpoints401ToRedirect = ["/user/login", "/user/me"]
+const noCheckEndpoints401ToRedirect = ["/users/login", "/users/me"]
 
 export class Api {
   private baseUrl: string;
@@ -23,7 +24,7 @@ export class Api {
       ...options,
     });
 
-    if (response.status === 401 && !noCheckEndpoints401ToRedirect.includes(endpoint)) {
+    if (response.status === EHttpStatusCode.UNAUTHORIZED && !noCheckEndpoints401ToRedirect.includes(endpoint)) {
       await authService.logout()
       window.location.href = "/login"
     }
@@ -32,6 +33,8 @@ export class Api {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message ?? "Error en la petición");
     }
+
+    if (response.status === EHttpStatusCode.OK_NO_CONTENT) return { exito: true, data: {} as T}
 
     return response.json();
   }

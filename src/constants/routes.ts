@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import type { DicRoute } from "./interfaces";
+import type { DicRoute, IRoute, IRouteIcon } from "./interfaces";
 import { LABEL_PER_ICON } from "./conversiones";
 
 const Landing = lazy(() => import("../pages/Landing"));
@@ -22,12 +22,18 @@ const LABEL_PER_COMPONENT: DicRoute = {
   Cosecha: Cosecha,
 };
 
-export const PRIVATE_ROUTES = [
-  { path: "/dashboard", label: "Dashboard", enabled: true },
-  { path: "/siembra", label: "Siembra", enabled: true },
-  { path: "/fertilizacion", label: "Fertilización", enabled: true },
-  { path: "/riego", label: "Riego", enabled: false },
-  { path: "/cosecha", label: "Cosecha", enabled: false },
+const GROUPS_TABS = {
+  Gestion: "Gestión",
+  Ordenes: "Órdenes"
+}
+
+export const PRIVATE_ROUTES: IRoute[] = [
+  { path: "/dashboard", label: "Dashboard", enabled: true, group: GROUPS_TABS.Gestion },
+  { path: "/lotes", label: "Lotes", enabled: false, group: GROUPS_TABS.Gestion },
+  { path: "/siembra", label: "Siembra", enabled: true, group: GROUPS_TABS.Ordenes },
+  { path: "/fertilizacion", label: "Fertilización", enabled: true, group: GROUPS_TABS.Ordenes },
+  { path: "/riego", label: "Riego", enabled: false, group: GROUPS_TABS.Ordenes },
+  { path: "/cosecha", label: "Cosecha", enabled: false, group: GROUPS_TABS.Ordenes }
 ];
 
 export const PUBLIC_ROUTES = [
@@ -51,7 +57,9 @@ export const NOT_FOUND_ROUTE_COMPONENT = {
   component: NotFound,
 };
 
-export const PRIVATE_ROUTES_ICONS = PRIVATE_ROUTES.map((route) => ({
-  ...route,
-  icon: LABEL_PER_ICON[route.label],
-}));
+export const PRIVATE_ROUTES_ICONS = PRIVATE_ROUTES.reduce((acc: Record<string, IRouteIcon[]>, route) => {
+  const ant = acc[route.group] ?? []
+
+  acc[route.group] = [...ant, {...route, icon: LABEL_PER_ICON[route.label]}]
+  return acc
+}, {})

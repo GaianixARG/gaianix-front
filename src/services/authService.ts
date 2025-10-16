@@ -8,7 +8,7 @@ export type LoginResponse = {
 
 export const authService = {
   login: (username: string, password: string) =>
-    api.post<LoginResponse>("/user/login", { username, password }),
-  logout: () => api.post<void>("/user/logout", {}),
-  me: () => api.get<IUser>("/user/me"),
+    api.post<LoginResponse>("/users/login", { username, password }),
+  logout: () => api.post<void>("/users/logout", {}),
+  me: () => api.get<IUser>("/users/me"),
 };

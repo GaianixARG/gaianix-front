@@ -18,7 +18,7 @@ export const AlertProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AlertContext.Provider value={{ showAlert, dismissAlert }}>
       {children}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 p-4">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 p-4 z-[101]">
         {alerts.map((alert) => (
           <Alert
             {...alert}

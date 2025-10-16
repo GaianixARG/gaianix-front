@@ -1,14 +1,14 @@
 import KanbanColumn from "../components/Ordenes/KanbanColumn";
 import useOrders from "../hooks/useOrders";
-import { useLoading } from "../context/LoadingContext";
 import Drawer from "../components/ui/Drawer/Drawer";
 import { useMemo, useState } from "react";
 import FormDetailsOrder from "../components/Ordenes/FormDetailsOrder";
-import { useAlert } from "../context/AlertContext";
 import { getArrayFromEnum, setDeepValue } from "../constants/utils";
 import { EStatus, type EOrderType } from "../constants/enums";
-import useButton from "../hooks/useButton";
 import type { IOrderDetails } from "../constants/interfaces";
+import useButton from "../hooks/useButton";
+import useAlert from "../hooks/context/useAlert";
+import { useLoading } from "../hooks/context/useLoading";
 
 type Props = {
   title: string;
@@ -62,7 +62,7 @@ const KanbanLayout = ({ title, type }: Props) => {
         />
       </Drawer>
       {title !== "" && <h1 className="text-2xl font-bold text-accent mb-6">{title}</h1>}
-      <div className="grid grid-rows-3 xl:grid-cols-3 xl:grid-rows-1 gap-5 px-4 w-full h-full">
+      <div className="grid grid-rows-3 xl:grid-cols-3 xl:grid-rows-1 gap-5 px-4">
         {estados.map((status) => {
           return <KanbanColumn
             key={status}

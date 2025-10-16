@@ -1,7 +1,7 @@
-import { BugOff, ChartPie, Droplets, Sprout, Tractor } from "lucide-react";
+import { BugOff, ChartPie, Droplets, Fence, Sprout, Tractor } from "lucide-react";
 import type { TBoton, TColors, TStatusColor } from "./types";
 import type { DicIcon, DicSize } from "./interfaces";
-import { EOrderType, EPrioridad, EStatus } from "./enums";
+import { EOrderType, EPrioridad, ESeed, EStatus } from "./enums";
 
 export const LABEL_PER_ICON: DicIcon = {
   Dashboard: ChartPie,
@@ -9,6 +9,7 @@ export const LABEL_PER_ICON: DicIcon = {
   Fertilización: BugOff,
   Riego: Droplets,
   Cosecha: Tractor,
+  Lotes: Fence
 };
 
 export const SizeMap: DicSize = {
@@ -48,6 +49,8 @@ export const BADGESTYLE_X_STATUS: Record<TColors, string> = {
   info: "bg-blue-100 text-blue-800",
   success: "bg-green-100 text-green-800",
   error: "bg-red-100 text-red-800",
+  "primary-light": "bg-primary-light text-accent",
+  "accent-light": "bg-accent-light text-accent"
 };
 
 export const BG_ICON_ROUNDED: Record<TColors, string> = {
@@ -60,6 +63,8 @@ export const BG_ICON_ROUNDED: Record<TColors, string> = {
   warning: "bg-warning/10",
   info: "bg-info/10",
   white: "bg-white/10",
+  "primary-light": "bg-primary-light/10",
+  "accent-light": "bg-accent-light/10"
 };
 
 export const TEXT_PER_STATUS_COLOR: Record<TColors, string> = {
@@ -72,6 +77,8 @@ export const TEXT_PER_STATUS_COLOR: Record<TColors, string> = {
   warning: "text-warning",
   info: "text-info",
   white: "text-white",
+  "primary-light": "text-primary-light",
+  "accent-light": "text-accent-light"
 };
 
 export const BG_PER_STATUS_COLOR: Record<TColors, string> = {
@@ -84,6 +91,8 @@ export const BG_PER_STATUS_COLOR: Record<TColors, string> = {
   success: "bg-green-100/50",
   warning: "bg-yellow-100/50",
   info: "bg-blue-100/70",
+  "primary-light": "bg-primary-light/30",
+  "accent-light": "bg-accent-light/30"
 };
 
 export const ALERT_PER_STATUS_COLOR: Record<TStatusColor, string> = {
@@ -116,4 +125,14 @@ export const PRIORIDAD_NAME: Record<EPrioridad, string> = {
   [EPrioridad.Alta]: "Alta",
   [EPrioridad.Media]: "Media",
   [EPrioridad.Baja]: "Baja"
+}
+
+export const COLOR_SEMILLA: Record<ESeed, TColors> = {
+  [ESeed.Maiz]: "tertiary",
+  [ESeed.Trigo]: "secondary",
+  [ESeed.Soja]: "accent",
+  [ESeed.Girasol]: "primary",
+  [ESeed.Arroz]: "accent-light",
+  [ESeed.Cebada]: "info",
+  [ESeed.Avena]: "error"
 }

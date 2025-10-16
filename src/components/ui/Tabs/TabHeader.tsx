@@ -9,7 +9,7 @@ type Props = {
 const TabHeader = ({ children, className, tabContentId }: Props) => {
   return (
     <ul
-      className={`flex justify-center flex-wrap text-sm font-medium text-center text-gray-400 ${className ?? ""}`}
+      className={`flex-none flex justify-center flex-wrap text-sm font-medium text-center text-gray-400 ${className ?? ""}`}
       data-tabs-toggle={`#${tabContentId}`}
       role="tablist"
     >

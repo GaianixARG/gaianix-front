@@ -13,7 +13,7 @@ const Badge = ({ label, color, className }: Props) => {
     className ?? ""
   }`;
 
-  return <p className={badgeClassName}>{label}</p>;
+  return <article className={badgeClassName}>{label}</article>;
 };
 
 export default Badge;

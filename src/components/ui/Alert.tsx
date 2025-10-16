@@ -43,7 +43,7 @@ const Alert = ({ id, type, message, onClose }: TAlert) => {
   return (
     <div
       id={id}
-      className={`flex items-center bg-white/75 gap-3 p-4 w-sm xl:w-lg mb-4 rounded-lg shadow-md ${ALERT_PER_STATUS_COLOR[type]} z-9999`}
+      className={`flex items-center bg-white gap-3 p-4 w-sm xl:w-lg mb-4 rounded-lg shadow-md ${ALERT_PER_STATUS_COLOR[type]}`}
       role="alert"
     >
       {Icon && <Icon className="w-5 h-5" />}

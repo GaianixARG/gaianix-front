@@ -164,3 +164,14 @@ export interface DicIcon {
 export interface DicSize {
   [key: string]: number
 }
+
+export interface IRoute {
+  path: string
+  label: string
+  enabled: boolean
+  group: string
+}
+
+export interface IRouteIcon extends IRoute {
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
+}

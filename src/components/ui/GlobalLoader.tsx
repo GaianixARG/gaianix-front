@@ -1,5 +1,5 @@
+import { useLoading } from "../../hooks/context/useLoading";
 import Loader from "./Loader";
-import { useLoading } from "../../context/LoadingContext";
 
 export default function GlobalLoader() {
   const { isLoading } = useLoading();

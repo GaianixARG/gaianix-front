@@ -1,9 +1,9 @@
 import { LogOut, Menu } from "lucide-react";
 import Button from "../Button";
-import { useAuth } from "../../../context/AuthContext";
 import logo from "../../../assets/images/logo.png";
 import { PRIVATE_ROUTES_ICONS } from "../../../constants/routes";
 import NavTab from "./NavTab";
+import useAuth from "../../../hooks/context/useAuth";
 
 const Sidebar = () => {
   const { handleLogout, user, isAuthenticated } = useAuth();
@@ -40,23 +40,29 @@ const Sidebar = () => {
             </p>
           )}
 
-          <ul className="space-y-2 font-medium">
-            {PRIVATE_ROUTES_ICONS.map((route) => (
-              <li key={route.path}>
-                <NavTab {...route} />
-              </li>
-            ))}
-            <ul className="pt-4 mt-4 space-y-2 font-medium border-t border-gray-700">
-              <li>
-                <NavTab
-                  path="#"
-                  label="Desconectarse"
-                  enabled={isAuthenticated}
-                  icon={LogOut}
-                  onClick={handleLogout}
-                />
-              </li>
+          {Object.entries(PRIVATE_ROUTES_ICONS).map(([group, routes], idx) => (
+            <ul key={`nav-${group}`} className={`space-y-2 font-medium pt-4 mt-4 ${idx > 0 && "border-t border-gray-700"}`}>
+                {routes.map((route) =>
+                    (  
+                      <li key={route.path}>
+                        <NavTab {...route} />
+                      </li> 
+                    )
+                  )
+                }
             </ul>
+          ))}
+         
+          <ul className="font-medium pt-4 mt-4 space-y-2 border-t border-gray-700">
+            <li>
+              <NavTab
+                path="#"
+                label="Desconectarse"
+                enabled={isAuthenticated}
+                icon={LogOut}
+                onClick={handleLogout}
+              />
+            </li>
           </ul>
         </div>
       </aside>

@@ -45,6 +45,20 @@ export enum ESeed {
   Avena = 'Avena'
 }
 
+export enum EHttpStatusCode {
+  // errors server
+  INTERNAL_SERVER_ERROR = 500,
+  // error client
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+  NOT_FOUND = 404,
+  // correct
+  OK = 200,
+  OK_CREATED = 201,
+  OK_NO_CONTENT = 204,
+}
+
 
 
 

@@ -2,19 +2,21 @@ import { Pencil, Trash } from "lucide-react";
 import Table from "../../components/ui/Table";
 import type { IFertilizer } from "../../constants/interfaces";
 import Button from "../ui/Button";
+import { useMemo } from "react";
 
 type Props = {
-  fertilizers: IFertilizer[];
-  onEdit: (seed: IFertilizer) => void;
-  onDelete: (id: string) => void;
+  fertilizers: IFertilizer[]
+  onEdit: (seed: IFertilizer) => void
+  onDelete: (id: string) => void
 };
 
 const FertilizersTable = ({ fertilizers, onEdit, onDelete }: Props) => {
-  const columns = [
+  const columns = useMemo(() => [
     { key: "name", label: "Nombre" },
     {
       key: "actions",
       label: "Acciones",
+      className: "w-10",
       displayItem: (item: IFertilizer) => (
         <div className="flex gap-2 items-center justify-center">
           <Button
@@ -40,7 +42,7 @@ const FertilizersTable = ({ fertilizers, onEdit, onDelete }: Props) => {
         </div>
       ),
     },
-  ];
+  ], [onDelete, onEdit]);
 
   return <Table columns={columns} data={fertilizers} />;
 };

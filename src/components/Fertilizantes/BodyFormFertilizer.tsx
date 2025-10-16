@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import type { IFertilizer } from "../../constants/interfaces"
 import DrawerBody from "../ui/Drawer/DrawerBody"
 import DrawerHeader from "../ui/Drawer/DrawerHeader"
@@ -8,16 +8,17 @@ import Button from "../ui/Button"
 
 type Props = {
   fertilizer: IFertilizer;
-  onSave: (fertilizer: IFertilizer) => void;
+  onSave: (fertilizer: IFertilizer) => void
+  onChangeValue: (property: string, value: any) => void
 };
 
-const BodyFormFertilizer = ({ fertilizer, onSave }: Props) => {
+const BodyFormFertilizer = ({ fertilizer, onSave, onChangeValue }: Props) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(fertilizer);
   };
 
-  const isEditing = fertilizer.id !== "";
+  const isEditing = useMemo(() => fertilizer.id !== '', [fertilizer.id]);
 
   return (
     <>
@@ -30,7 +31,7 @@ const BodyFormFertilizer = ({ fertilizer, onSave }: Props) => {
           <label className="block text-sm font-medium text-accent-light">
               Nombre
           </label>
-          <Input name="name" placeholder="Nombre" defaultValue={fertilizer.name} />
+          <Input name="name" placeholder="Nombre" value={fertilizer.name} onChange={(e) => onChangeValue("name", e.target.value)} />
         </div>
         <Button
           tipo="primary-light"

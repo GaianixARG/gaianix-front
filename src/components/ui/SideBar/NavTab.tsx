@@ -1,21 +1,26 @@
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react"
+import { Link } from "react-router-dom"
 
 type Props = {
-  path: string;
-  label: string;
-  icon: LucideIcon;
-  enabled: boolean;
-  onClick?: () => void;
-};
+  path: string
+  label: string
+  icon: LucideIcon
+  enabled: boolean
+  onClick?: () => void
+}
 
 const NavTab = ({ path, label, icon: Icon, enabled, onClick }: Props) => {
+  const handleClick = () => {
+    if (onClick != null) onClick()
+  }
+
   return (
-    <a
-      href={path}
+    <Link
+      to={path}
       className={`flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group ${
         enabled ? "" : "opacity-50 pointer-events-none"
       }`}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <Icon
         size={22}
@@ -23,8 +28,8 @@ const NavTab = ({ path, label, icon: Icon, enabled, onClick }: Props) => {
         aria-hidden="true"
       />
       <span className="flex-1 ms-3 whitespace-nowrap">{label}</span>
-    </a>
-  );
-};
+    </Link>
+  )
+}
 
-export default NavTab;
+export default NavTab

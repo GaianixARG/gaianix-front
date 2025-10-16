@@ -10,17 +10,18 @@ import { ESeed } from "../../constants/enums";
 import Button from "../ui/Button";
 
 type Props = {
-  seed: ISeed;
-  onSave: (seed: ISeed) => void;
+  seed: ISeed
+  onSave: (seed: ISeed) => void
+  onChangeValue: (property: string, value: any) => void
 };
 
-const BodyFormSeed = ({ seed, onSave }: Props) => {
+const BodyFormSeed = ({ seed, onSave, onChangeValue }: Props) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(seed);
   };
 
-  const isEditing = seed.id !== "";
+  const isEditing = useMemo(() => seed.id !== "", [seed.id]);
 
   const memoTypeSeed = useMemo(() => getArrayFromEnum(ESeed, false), [])
   return (
@@ -34,7 +35,7 @@ const BodyFormSeed = ({ seed, onSave }: Props) => {
           <label htmlFor={`seed-name-${seed.id}`} className="block text-sm font-medium text-accent-light">
             Nombre
           </label>
-          <Input id={`seed-name-${seed.id}`} name="name" placeholder="Nombre" defaultValue={seed.name} />
+          <Input id={`seed-name-${seed.id}`} name="name" placeholder="Nombre" value={seed.name} onChange={(e) => onChangeValue("name", e.target.value)} />
         </div>
         <div className="mb-4">
           <label htmlFor={`seed-type-${seed.id}`} className="block text-sm font-medium text-accent-light">
@@ -46,7 +47,7 @@ const BodyFormSeed = ({ seed, onSave }: Props) => {
             options={memoTypeSeed}
             defaultValue={seed.type}
             addOptionEmpty
-            //onChange={handleChange}
+            onChange={(value) => onChangeValue("type", value)}
           />
         </div>
         <Button

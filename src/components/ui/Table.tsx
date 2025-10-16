@@ -2,10 +2,11 @@ import { ChevronsUpDown } from "lucide-react";
 import type { JSX } from "react";
 
 type TableColumn<T> = {
-  key: string;
-  label: string;
-  format?: string;
-  displayItem?: (params: TableData<T>) => JSX.Element;
+  key: string
+  label: string
+  format?: string
+  className?: string
+  displayItem?: (params: TableData<T>) => JSX.Element
 };
 
 type TableData<T> = T & (Record<string, any> | null);
@@ -36,8 +37,8 @@ const Table = <T,>({ columns, data, onClick }: Props<T>) => {
       >
         <thead className="text-sm uppercase bg-accent-light text-bold">
           <tr>
-            {columns.map(({ key, label, format = "" }) => (
-              <th key={`th-${key}`} className="p-4">
+            {columns.map(({ key, label, format = "", className = ""}) => (
+              <th key={`th-${key}`} className={`p-4 ${className}`}>
                 <span
                   className="flex items-center cursor-pointer"
                   data-format={format}

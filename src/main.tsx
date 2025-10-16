@@ -7,13 +7,13 @@ import { LoadingProvider } from "./providers/LoadingProvider.tsx";
 import { AlertProvider } from "./providers/AlertProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <LoadingProvider>
-    <AlertProvider>
-      <AuthProvider>
-        <BrowserRouter>
+  <AlertProvider>
+    <LoadingProvider>
+      <BrowserRouter>
+        <AuthProvider>
           <AppRouter />
-        </BrowserRouter>
-      </AuthProvider>
-    </AlertProvider>
-  </LoadingProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </LoadingProvider>
+  </AlertProvider>
 );

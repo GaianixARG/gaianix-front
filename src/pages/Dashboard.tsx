@@ -1,11 +1,11 @@
 import PrivateLayout from "../layouts/PrivateLayout";
 import useDashboard from "../hooks/useDashboard";
-import { useLoading } from "../context/LoadingContext";
 import SummaryCard from "../components/Dashboard/SummaryCard";
 import ActivityListItem from "../components/Dashboard/ActivityListItem";
 import OrdersTable from "../components/Dashboard/OrdersTable";
 import Carrousel from "../components/ui/Carrousel";
-import { useAlert } from "../context/AlertContext";
+import { useLoading } from "../hooks/context/useLoading";
+import useAlert from "../hooks/context/useAlert";
 
 export default function Dashboard() {
   const { setLoading } = useLoading();

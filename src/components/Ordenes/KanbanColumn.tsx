@@ -3,7 +3,6 @@ import { FilterIcon, PlusIcon, SortAscIcon } from "lucide-react";
 import OrderCard from "./OrderCard";
 import Button from "../ui/Button";
 import Badge from "../ui/Badge";
-import { useAlert } from "../../context/AlertContext";
 import { useState } from "react";
 import {
   BG_PER_STATUS_COLOR,
@@ -12,6 +11,7 @@ import {
   TEXT_PER_STATUS_COLOR,
 } from "../../constants/conversiones";
 import { EStatus } from "../../constants/enums";
+import useAlert from "../../hooks/context/useAlert";
 
 type Props = {
   status: EStatus;
@@ -79,7 +79,7 @@ const KanbanColumn = ({
       onDragLeave={handleOnDragLeave}
       onDrop={handleDropEnd}
     >
-      <div className="flex items-center justify-between mb-4 bg-white text-sm font-semibold p-2 rounded-full">
+      <div className="flex items-center justify-between bg-white text-sm font-semibold p-2 rounded-full">
         <div className="flex items-center gap-2">
           <Badge
             color="accent"
@@ -134,7 +134,7 @@ const KanbanColumn = ({
       <div className="
       overflow-x-auto xl:overflow-x-visible   /* scroll horizontal en mobile */
       xl:overflow-y-auto                      /* scroll vertical en XL */
-      max-h-[90vh]                             /* limite de altura de la columna, ajustable */
+      max-h-[70vh]                            /* limite de altura de la columna, ajustable */
       p-3
       snap-x xl:snap-y">
         <div className="

@@ -39,7 +39,7 @@ const useSeeds = (setLoading: FLoading, showAlert: FShowAlert) => {
 
   const createNewSeed = (seed: ISeed) => {
     seedService.create(seed)
-        .then((res) => {
+      .then((res) => {
           setSeeds((prev) => [...prev, res.data]);
           showAlert({
             type: "success",
@@ -57,7 +57,7 @@ const useSeeds = (setLoading: FLoading, showAlert: FShowAlert) => {
 
   const updateSeed = (id: string, seed: ISeed) => {
     seedService.update(id, seed)
-        .then((res) => {
+      .then((res) => {
           setSeeds((prev) => prev.map((s) => (s.id === seed.id ? res.data : s)));
           showAlert({
             type: "success",
@@ -103,6 +103,7 @@ const useSeeds = (setLoading: FLoading, showAlert: FShowAlert) => {
   return {
     seeds,
     editingSeed,
+    setEditingSeed,
     handleCreate,
     handleEdit,
     handleDelete,
