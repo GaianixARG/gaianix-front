@@ -2,8 +2,8 @@ import { useCallback, useMemo, useState } from "react";
 import type { IUser } from "../constants/interfaces";
 import { authService } from "../services/authService";
 import { AuthContext } from "../context/AuthContext";
-import useAlert from "../hooks/context/useAlert";
 import { useNavigate } from "react-router-dom";
+import { useAlertStore } from "../store/alertStore";
 
 const initialUser: IUser = {
   id: "",
@@ -17,12 +17,12 @@ const initialUser: IUser = {
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate()
-  const { showAlert } = useAlert();
+  const showAlert = useAlertStore(state => state.showAlert);
+
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<IUser>(initialUser);
 
   const handleSetSession =  useCallback((userSession: IUser, goTo: string) => {
-    console.log(userSession)
     setIsAuthenticated(userSession.id !== "");
     setUser(userSession);
     navigate(goTo)
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch {
       showAlert({
         type: "error",
-        message: "Error al conectarse: "
+        message: "Usuario o contraseña invalidos"
       });
     }
   }, [showAlert, handleSetSession])

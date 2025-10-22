@@ -1,5 +1,5 @@
-import { lazy, type JSX, type LazyExoticComponent } from "react";
-import type { FOrderDetails, TFormDetailsOrder } from "../../constants/types";
+import { lazy, useEffect, useState, type JSX, type LazyExoticComponent } from "react";
+import type { FOrderDetails, TFormDetailsOrderType } from "../../constants/types";
 import { ClipboardCheck, ClipboardList, ClipboardPen } from "lucide-react";
 import Button from "../ui/Button";
 import BodyFormOrder from "./BodyFormOrder";
@@ -7,17 +7,22 @@ import { COLOR_PER_STATUS, ORDER_TYPE_NAME, STATUS_NAME } from "../../constants/
 import Badge from "../ui/Badge";
 import DrawerBody from "../ui/Drawer/DrawerBody";
 import DrawerHeader from "../ui/Drawer/DrawerHeader";
-import {EOrderType} from "../../constants/enums";
+import { EOrderType } from "../../constants/enums";
+import { useOrderStore } from "../../store/orderStore";
+import { initialPerType } from "../../utils/orderUtils";
+import { setDeepValue } from "../../constants/utils";
+import type { IOrderDetails } from "../../constants/interfaces";
 
-type Props = TFormDetailsOrder & {
-  onCreate: FOrderDetails;
-  onUpdate: FOrderDetails;
+type Props = {
+  type: EOrderType
+  onCreate: FOrderDetails
+  onUpdate: FOrderDetails
 };
 
 const FormCreatorOrder: Record<
   EOrderType,
   LazyExoticComponent<
-    ({ order, onChangeValue }: TFormDetailsOrder) => JSX.Element
+    ({ order, onChangeValue }: TFormDetailsOrderType) => JSX.Element
   >
 > = {
   [EOrderType.Siembra]: lazy(() => import("../Siembra/FormDetailsOrdenSiembra")),
@@ -28,27 +33,56 @@ const FormCreatorOrder: Record<
 };
 
 const FormDetailsOrder = ({
-  order,
+  type,
   onCreate,
   onUpdate,
-  onChangeValue,
 }: Props) => {
-  const FormTypeComponent = FormCreatorOrder[order.type];
-  const { id, type } = order;
+  const orders = useOrderStore(state => state.orders)
+  const idxOrderSelected = useOrderStore(state => state.orderSelected)
+  const clearSelection = useOrderStore(state => state.selectOrder)
+
+  const [orderDetails, setOrderDetails] = useState<IOrderDetails | null>()
+
+  useEffect(() => {
+    const orderSelected = orders[idxOrderSelected]
+    if (orderSelected == null) {
+      setOrderDetails(initialPerType[type]);
+      return;
+    }
+
+    if (orderSelected.type !== type) {
+      clearSelection("");
+      setOrderDetails(initialPerType[type]);
+      return;
+    }
+
+    setOrderDetails(orderSelected);
+  }, [type, idxOrderSelected, orders, clearSelection])
+
+
+  const handleChangeProperty = (property: string, value: any) => {
+    setOrderDetails((prev) => setDeepValue(prev, property, value));
+  };
+
+  if (!orderDetails) return
+
+  const { id } = orderDetails;
+
+  const FormTypeComponent = FormCreatorOrder[type];
   const isEditing = id !== "";
 
   const IconButtonForm = isEditing ? ClipboardPen : ClipboardCheck;
   const textButtonForm = `${isEditing ? "Editar" : "Crear"} Orden de Trabajo`;
-  const titleText = `${isEditing ? order.codigo : ORDER_TYPE_NAME[type]} | ${
+  const titleText = `${isEditing ? orderDetails.codigo : ORDER_TYPE_NAME[type]} | ${
     isEditing ? "Editar" : "Creación"
   }`;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isEditing) {
-      onUpdate(order);
+      onUpdate(orderDetails);
     } else {
-      onCreate(order);
+      onCreate(orderDetails);
     }
   };
 
@@ -59,19 +93,18 @@ const FormDetailsOrder = ({
         {titleText}
         <div className="ms-3">
           <Badge
-            color={COLOR_PER_STATUS[order.status]}
-            label={STATUS_NAME[order.status]}
+            color={COLOR_PER_STATUS[orderDetails.status]}
+            label={STATUS_NAME[orderDetails.status]}
             className="py-1"
           />
         </div>
       </DrawerHeader>
       <DrawerBody onSubmit={handleSubmit}>
-        <BodyFormOrder order={order} onChangeValue={onChangeValue} />
-        <FormTypeComponent order={order} onChangeValue={onChangeValue} />
+        <BodyFormOrder order={orderDetails} onChangeValue={handleChangeProperty} />
+        <FormTypeComponent order={orderDetails} onChangeValue={handleChangeProperty} />
         <Button
           tipo="primary-light"
           className="w-full flex items-center justify-center px-2 py-2.5 text-sm font-medium"
-          onClick={() => {}}
           aria-label={textButtonForm}
           type="submit"
         >

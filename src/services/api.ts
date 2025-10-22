@@ -1,8 +1,9 @@
 import { EHttpStatusCode } from "../constants/enums";
 import type { TResponseApi } from "../constants/types";
-import { authService } from "./authService";
+import { KEY_AUTH_STORE } from "../store/authStore";
+import { storageService } from "./storage";
 
-const noCheckEndpoints401ToRedirect = ["/users/login", "/users/me"]
+const noCheckEndpoints401ToRedirect = ["/users/login"]
 
 export class Api {
   private baseUrl: string;
@@ -25,8 +26,9 @@ export class Api {
     });
 
     if (response.status === EHttpStatusCode.UNAUTHORIZED && !noCheckEndpoints401ToRedirect.includes(endpoint)) {
-      await authService.logout()
+      storageService.removeItem(KEY_AUTH_STORE)
       window.location.href = "/login"
+      return { exito: false, data: {} as T}
     }
 
     if (!response.ok) {

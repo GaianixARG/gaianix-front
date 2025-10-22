@@ -1,29 +1,31 @@
-import { useMemo } from "react";
-import type { IOrderSiembra } from "../../constants/interfaces";
-import DatePicker from "../ui/DatePicker/DatePicker";
-import Input from "../ui/Input";
-import Select from "../ui/Select";
-import { getArrayFromEnum } from "../../constants/utils";
-import type { TFormDetailsOrder } from "../../constants/types";
-import useSeeds from "../../hooks/useSeeds";
-import { EDistanciaSiembra } from "../../constants/enums";
-import useFertilizers from "../../hooks/useFertilizers";
-import { useLoading } from "../../hooks/context/useLoading";
-import useAlert from "../../hooks/context/useAlert";
+import { useMemo } from "react"
+import type { IOrderSiembra } from "../../constants/interfaces"
+import DatePicker from "../ui/DatePicker/DatePicker"
+import Input from "../ui/Input"
+import Select from "../ui/Select"
+import { getArrayFromEnum } from "../../constants/utils"
+import type { TFormDetailsOrder } from "../../constants/types"
+import { EDistanciaSiembra } from "../../constants/enums"
+import { useSeedStore } from "../../store/seedStore"
+import { useFertilizerStore } from "../../store/fertilizerStore"
 
 const FormDetailsOrdenSiembra = ({
   order,
   onChangeValue,
 }: TFormDetailsOrder) => {
-  const siembraDetails = order as IOrderSiembra;
-  const { setLoading } = useLoading()
-  const { showAlert } = useAlert()
+  const siembraDetails = order as IOrderSiembra
 
-  const { seeds } = useSeeds(setLoading, showAlert);
-  const memoSeeds = useMemo(() => seeds, [seeds]);
+  const seeds = useSeedStore(state => state.seeds)
+  const memoSeeds = useMemo(() => seeds, [seeds])
 
-  const { fertilizers } = useFertilizers(setLoading, showAlert)
-  const memoFertilizers = useMemo(() => fertilizers, [fertilizers]);
+  const fertilizers = useFertilizerStore(state => state.fertilizers)
+  const memoFertilizers = useMemo(() => fertilizers, [fertilizers])
+
+  const handleChangeValueFertilizer = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onChangeValue("siembra.fertilizante.id", e.target.value)
+    // ESTO ES PARA QUE TOME BIEN EN EL BACKEND
+    if (siembraDetails.siembra.fertilizante == null) onChangeValue("siembra.fertilizante.name", "")
+  }
 
   return (
     <>
@@ -45,10 +47,9 @@ const FormDetailsOrdenSiembra = ({
           <label className="block text-sm font-medium text-accent-light">
             Cantidad de Hectáreas
           </label>
-          <input
+          <Input
             type="number"
-            defaultValue={siembraDetails.siembra.cantidadHectareas}
-            className="text-sm rounded-lg block w-full p-2.5 border bg-gray-700 border-gray-600 placeholder-accent-light text-white focus-visible:ring-1 focus-visible:ring-primary-light focus-visible:outline-none"
+            value={siembraDetails.siembra.cantidadHectareas}
             placeholder="Ej: 10"
             required
             onChange={(e) =>
@@ -71,7 +72,7 @@ const FormDetailsOrdenSiembra = ({
             addOptionEmpty
             defaultValue={siembraDetails.siembra.datosSemilla.semilla.id}
             required
-            onChange={(value) => onChangeValue("siembra.datosSemilla.semilla.id", value)}
+            onChange={({ target }) => onChangeValue("siembra.datosSemilla.semilla.id", target.value)}
           />
         </div>
         <div className="flex-1">
@@ -80,7 +81,7 @@ const FormDetailsOrdenSiembra = ({
           </label>
           <Input
             iconRight={<span className="text-accent-light">u/ha</span>}
-            defaultValue={siembraDetails.siembra.datosSemilla.cantidadSemillasHa}
+            value={siembraDetails.siembra.datosSemilla.cantidadSemillasHa}
             placeholder="Ej: 100000"
             required
             onChange={(e) =>
@@ -94,7 +95,7 @@ const FormDetailsOrdenSiembra = ({
           <label className="block text-sm font-medium text-accent-light">
             Fertilizante
           </label>
-            <Select
+          <Select
             id={`fertilizante_${order.id}`}
             options={memoFertilizers.map((f) => ({
               value: f.id,
@@ -102,9 +103,7 @@ const FormDetailsOrdenSiembra = ({
             }))}
             defaultValue={siembraDetails.siembra.fertilizante?.id}
             required
-            onChange={(value) =>
-              onChangeValue("siembra.fertilizante.id", value)
-            }
+            onChange={handleChangeValueFertilizer}
             addOptionEmpty
           />
         </div>
@@ -117,14 +116,14 @@ const FormDetailsOrdenSiembra = ({
             options={getArrayFromEnum(EDistanciaSiembra)}
             defaultValue={siembraDetails.siembra.distanciaSiembra}
             required
-            onChange={(value) =>
-              onChangeValue("siembra.distanciaSiembra", value)
+            onChange={({ target }) =>
+              onChangeValue("siembra.distanciaSiembra", target.value)
             }
           />
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default FormDetailsOrdenSiembra;
+export default FormDetailsOrdenSiembra

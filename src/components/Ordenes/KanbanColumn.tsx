@@ -1,76 +1,80 @@
-import type { IOrder } from "../../constants/interfaces";
-import { FilterIcon, PlusIcon, SortAscIcon } from "lucide-react";
-import OrderCard from "./OrderCard";
-import Button from "../ui/Button";
-import Badge from "../ui/Badge";
-import { useState } from "react";
+import type { IOrder } from "../../constants/interfaces"
+import { FilterIcon, PlusIcon, SortAscIcon } from "lucide-react"
+import OrderCard from "./OrderCard"
+import Button from "../ui/Button"
+import Badge from "../ui/Badge"
+import { useState } from "react"
 import {
   BG_PER_STATUS_COLOR,
   COLOR_PER_STATUS,
   STATUS_NAME,
   TEXT_PER_STATUS_COLOR,
-} from "../../constants/conversiones";
-import { EStatus } from "../../constants/enums";
-import useAlert from "../../hooks/context/useAlert";
+} from "../../constants/conversiones"
+import { EStatus } from "../../constants/enums"
+import { useAlertStore } from "../../store/alertStore"
 
 type Props = {
-  status: EStatus;
-  orders: IOrder[];
-  onDropOrder: (orderId: string, newStatus: EStatus) => void;
-  onSelectOrder: (orderId: string, status: EStatus) => void;
-};
+  status: EStatus
+  orders: IOrder[]
+  onDropOrder: (orderId: string, newStatus: EStatus) => void
+  onSelectOrder: (orderId: string) => void
+}
+
+const createElementForDragImage = (e: React.DragEvent) => {
+  const target = e.currentTarget as HTMLElement
+  const dragImage = target.cloneNode(true) as HTMLElement
+  dragImage.style.position = "absolute"
+  dragImage.style.width = "240px"
+  document.body.appendChild(dragImage)
+
+  e.dataTransfer.setDragImage(dragImage, 0, 0)
+  setTimeout(() => {
+    document.body.removeChild(dragImage)
+  }, 0)
+}
+
+const handleDragStart = (e: React.DragEvent, orderId: string) => {
+  e.dataTransfer.setData("orderId", orderId)
+  createElementForDragImage(e)
+}
 
 const KanbanColumn = ({
   status,
   orders,
   onDropOrder,
-  onSelectOrder,
+  onSelectOrder
 }: Props) => {
-  const { showAlert } = useAlert();
-  const [isActive, setIsActive] = useState(false);
-
-  const createElementForDragImage = (e: React.DragEvent) => {
-    const target = e.currentTarget as HTMLElement;
-    const dragImage = target.cloneNode(true) as HTMLElement;
-    dragImage.style.position = "absolute";
-    dragImage.style.width = "240px";
-    document.body.appendChild(dragImage);
-
-    e.dataTransfer.setDragImage(dragImage, 0, 0);
-    setTimeout(() => {
-      document.body.removeChild(dragImage);
-    }, 0);
-  };
-
-  const handleDragStart = (e: React.DragEvent, orderId: string) => {
-    e.dataTransfer.setData("orderId", orderId);
-    createElementForDragImage(e);
-  };
+  const showAlert = useAlertStore(state => state.showAlert)
+  const [isActive, setIsActive] = useState(false)
 
   const handleDropEnd = (e: React.DragEvent) => {
-    e.preventDefault();
-    const orderId = e.dataTransfer.getData("orderId");
-    if (orderId) onDropOrder(orderId, status);
+    e.preventDefault()
+    const orderId = e.dataTransfer.getData("orderId")
+    if (orderId) onDropOrder(orderId, status)
 
-    setIsActive(false);
-  };
+    setIsActive(false)
+  }
 
   const handleOnDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsActive(true);
-  };
+    e.preventDefault()
+    setIsActive(true)
+  }
 
   const handleOnDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsActive(false);
-  };
+    e.preventDefault()
+    setIsActive(false)
+  }
 
-  const colorStatus = COLOR_PER_STATUS[status];
+  const colorStatus = COLOR_PER_STATUS[status]
 
-  const claseTextoTituloColumna = `uppercase ${TEXT_PER_STATUS_COLOR[colorStatus]} font-bold me-1`;
+  const claseTextoTituloColumna = `uppercase ${TEXT_PER_STATUS_COLOR[colorStatus]} font-bold me-1`
   const bgContainer = `p-4 rounded-xl shadow-md transition-colors w-full min-w-0 ${
     isActive ? BG_PER_STATUS_COLOR[colorStatus] : "bg-gray-200/50"
-  }`;
+    }`
+  
+  const handleSelectOrder = (orderId: string) => () => {
+    onSelectOrder(orderId)
+  }
 
   return (
     <div
@@ -93,7 +97,7 @@ const KanbanColumn = ({
             type="button"
             tipo="white"
             className="p-1"
-            onClick={() => onSelectOrder("", status)}
+            onClick={handleSelectOrder("")}
             title="Crear nueva orden"
           >
             <PlusIcon className="w-4 h-4" />
@@ -147,7 +151,7 @@ const KanbanColumn = ({
               key={order.id}
               {...order}
               onDragStart={handleDragStart}
-              onClick={() => onSelectOrder(order.id, status)}
+              onClick={handleSelectOrder(order.id)}
             />
           ))
         ) : (
@@ -156,7 +160,7 @@ const KanbanColumn = ({
           </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default KanbanColumn;
+export default KanbanColumn

@@ -35,19 +35,19 @@ const parseValueByType = (oldValue: any, newValue: any) => {
 };
 
 export const setDeepValue = (object: any, propertyPath: string, value: any) => {
-    const keys = propertyPath.split(".")
-    const updated = { ...object }
+  const keys = propertyPath.split(".")
+  const updated = { ...object }
 
-    let current: any = updated
-    keys.forEach((key, index) => {
-      if (index === keys.length - 1) {
-        const oldValue = current[key]
-        current[key] = parseValueByType(oldValue, value)
-      } else {
-        current[key] = { ...current[key] }
-        current = current[key]
-      }
-    });
-
-    return updated
+  let current: any = updated
+  keys.forEach((key, index) => {
+    if (index === keys.length - 1) {
+      const oldValue = current[key]
+      current[key] = parseValueByType(oldValue, value)
+    } else {
+      current[key] = { ...current[key] }
+      current = current[key]
+    }
+  });
+  
+  return updated
 }

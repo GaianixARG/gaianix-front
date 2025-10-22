@@ -1,37 +1,39 @@
 import { CircleAlert, CircleCheck, CircleX, Info, X } from "lucide-react";
-import type { TAlert } from "../../constants/types";
-import Button from "./Button";
-import { ALERT_PER_STATUS_COLOR } from "../../constants/conversiones";
 import { useCallback, useEffect } from "react";
+import type { TAlert, TStatusColor } from "../../../constants/types";
+import { ALERT_PER_STATUS_COLOR } from "../../../constants/conversiones";
+import Button from "../Button";
+
+const IconPerStatus = (type: TStatusColor) => {
+  switch (type) {
+    case "error":
+      return CircleX; // Replace with actual error icon
+    case "success":
+      return CircleCheck; // Replace with actual success icon
+    case "warning":
+      return CircleAlert; // Replace with actual warning icon
+    case "info":
+      return Info; // Replace with actual info icon
+    default:
+      return null;
+  }
+};
 
 const Alert = ({ id, type, message, onClose }: TAlert) => {
   const dismissible = onClose != null;
   const handleClose = useCallback(() => {
     if (dismissible && id != null) {
-      const alertElement = document.getElementById(id);
-      if (alertElement) {
-        alertElement.style.display = "none";
-      }
       if (onClose != null) {
         onClose();
       }
     }
+    else if (id != null) {
+      const $alertElement = document.getElementById(id);
+      if ($alertElement) $alertElement.remove()
+    }
   }, [dismissible, id, onClose]);
 
-  const Icon = (() => {
-    switch (type) {
-      case "error":
-        return CircleX; // Replace with actual error icon
-      case "success":
-        return CircleCheck; // Replace with actual success icon
-      case "warning":
-        return CircleAlert; // Replace with actual warning icon
-      case "info":
-        return Info; // Replace with actual info icon
-      default:
-        return null;
-    }
-  })();
+  const Icon = IconPerStatus(type)
 
   useEffect(() => {
     const timeout = setTimeout(() => {

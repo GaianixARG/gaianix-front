@@ -3,15 +3,15 @@ import Table from "../../components/ui/Table";
 import type { IFertilizer } from "../../constants/interfaces";
 import Button from "../ui/Button";
 import { useMemo } from "react";
+import { useFertilizerStore } from "../../store/fertilizerStore";
 
 type Props = {
-  fertilizers: IFertilizer[]
-  onEdit: (seed: IFertilizer) => void
+  onEdit: (id: string) => void
   onDelete: (id: string) => void
 };
 
-const FertilizersTable = ({ fertilizers, onEdit, onDelete }: Props) => {
-  const columns = useMemo(() => [
+const getColumnsFertilizer = ({ onEdit, onDelete }: Props) =>
+  [
     { key: "name", label: "Nombre" },
     {
       key: "actions",
@@ -24,7 +24,7 @@ const FertilizersTable = ({ fertilizers, onEdit, onDelete }: Props) => {
             className="p-2"
             onClick={(e) => {
               e.stopPropagation();
-              onEdit(item);
+              onEdit(item.id);
             }}
           >
             <Pencil className="w-4 h-4" />
@@ -42,8 +42,11 @@ const FertilizersTable = ({ fertilizers, onEdit, onDelete }: Props) => {
         </div>
       ),
     },
-  ], [onDelete, onEdit]);
+  ]
 
+const FertilizersTable = ({ onEdit, onDelete }: Props) => {
+  const columns = useMemo(() => getColumnsFertilizer({ onEdit, onDelete }), [onDelete, onEdit]);
+  const fertilizers = useFertilizerStore(state => state.fertilizers)
   return <Table columns={columns} data={fertilizers} />;
 };
 

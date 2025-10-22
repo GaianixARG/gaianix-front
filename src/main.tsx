@@ -2,18 +2,16 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./routes/AppRouter.tsx";
-import { AuthProvider } from "./providers/AuthProvider.tsx";
 import { LoadingProvider } from "./providers/LoadingProvider.tsx";
-import { AlertProvider } from "./providers/AlertProvider.tsx";
+import AlertContainter from "./components/ui/Alert/AlertContainer.tsx";
+import GlobalLoader from "./components/ui/GlobalLoader.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <AlertProvider>
+  <BrowserRouter>
     <LoadingProvider>
-      <BrowserRouter>
-        <AuthProvider>
-          <AppRouter />
-        </AuthProvider>
-      </BrowserRouter>
+        <GlobalLoader />
+        <AlertContainter />
+        <AppRouter />
     </LoadingProvider>
-  </AlertProvider>
+  </BrowserRouter>
 );

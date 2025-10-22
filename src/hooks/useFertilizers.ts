@@ -1,111 +1,51 @@
-import { useEffect, useState } from "react";
-import type { IFertilizer } from "../constants/interfaces";
-import type { FLoading, FShowAlert } from "../constants/types";
-import { fertilizerService } from "../services/fertilizerService";
+import type { IFertilizer } from "../constants/interfaces"
+import { useFertilizerStore } from "../store/fertilizerStore"
+import { useAlertStore } from "../store/alertStore"
 
-const initialSeed = { id: "", name: "" };
+const useFertilizers = () => {
+  const showAlert = useAlertStore(state => state.showAlert)
 
-const useFertilizers = (setLoading: FLoading, showAlert: FShowAlert) => {
-  const [fertilizers, setFertilizers] = useState<IFertilizer[]>([]);
-  const [editingFertilizer, setEditingFertilizer] = useState<IFertilizer>(initialSeed);
-
-  const handleCreate = () => {
-    setEditingFertilizer(initialSeed);
-  };
-
-  const handleEdit = (fertilizer: IFertilizer) => {
-    setEditingFertilizer(fertilizer);
-  };
-
-  const handleDelete = (id: string) => {
-    setLoading(true)
-    fertilizerService.remove(id)
-      .then(() => {
-        setFertilizers((prev) => prev.filter((s) => s.id !== id));
-        showAlert({
-          type: "success",
-          message: "Fertilizante eliminado correctamente!",
-        })
-      })
-      .catch((err) => {
-        showAlert({
-          type: "error",
-          message: err.message,
-        })
-      })
-      .finally(() => setLoading(false))
-  };
-
-  const createNewFertilizer = (fertilizer: IFertilizer) => {
-    fertilizerService.create(fertilizer)
-      .then((res) => {
-          setFertilizers((prev) => [...prev, res.data]);
-          showAlert({
-            type: "success",
-            message: `Fertilizante ${res.data.name} creado correctamente`,
-          })
-      })
-      .catch((err) => {
-        showAlert({
-          type: "error",
-          message: err.message
-        })
-      })
-      .finally(() => setLoading(false))
+  const updateFertilizer = useFertilizerStore(state => state.updateFertilizer)
+  const createNewFertilizer = useFertilizerStore(state => state.createNewFertilizer)
+  const deleteFertilizer = useFertilizerStore(state => state.deleteFertilizer)
+  
+  const handleDelete = async (id: string) => {
+    const exito = await deleteFertilizer(id)
+    showAlert({
+      type: exito ? "success" : "error",
+      message: exito ? "Fertilizante eliminado correctamente!" : "Error al eliminar el fertilizante",
+    })
   }
 
-  const updateFertilizer = (id: string, fertilizer: IFertilizer) => {
-    fertilizerService.update(id, fertilizer)
-      .then(() => {
-          showAlert({
-            type: "success",
-            message: "Fertilizante actualizado correctamente!",
-          })
-      })
-      .catch(() => {
-        showAlert({
-          type: "error",
-          message: "Error al actualizar el fertilizante"
-        })
-      })
-      .finally(() => setLoading(false))
+  const handleCreateNewSeed = async (fertilizer: IFertilizer) => {
+    const newFert = await createNewFertilizer(fertilizer)
+    const exito = newFert != null
+    showAlert({
+      type: exito ? "success" : "error",
+      message: exito ? `Fertilizante ${newFert.name} creado correctamente!`: "Error al crear el fertilizante",
+    })
   }
 
-  const handleSave = (fertilizer: IFertilizer) => {
-    if (editingFertilizer.id !== "") {
-      updateFertilizer(editingFertilizer.id, fertilizer)
+  const handleUpdateSeed = async (fertilizer: IFertilizer) => {
+    const exito = await updateFertilizer(fertilizer)
+    showAlert({
+      type: exito ? "success" : "error",
+      message: exito ? "Fertilizante actualizado correctamente!" : "Error al actualizar el fertilizante",
+    })
+  }
+
+  const handleSave = async (fertilizer: IFertilizer) => {
+    if (fertilizer.id !== "") {
+      handleUpdateSeed(fertilizer)
     } else {
-      createNewFertilizer(fertilizer)
+      handleCreateNewSeed(fertilizer)
     }
-  };
-
-  useEffect(() => {
-      const fetchFertilizer = async () => {
-        try {
-          setLoading(true)
-          const response = await fertilizerService.getAll()
-          setFertilizers(response.data)
-        } catch (error: any) {
-          showAlert({
-            type: "error",
-            message: error.message,
-          })
-        } finally {
-          setLoading(false)
-        }
-      };
-      fetchFertilizer()
-    }, [setLoading, showAlert]);
+  }
 
   return {
-    fertilizers,
-    editingFertilizer,
-    setEditingFertilizer,
-    handleCreate,
-    handleEdit,
     handleDelete,
-    handleSave,
-  };
-};
+    handleSave
+  }
+}
 
-export default useFertilizers;
+export default useFertilizers

@@ -4,19 +4,30 @@ import ButtonLoading from "../components/ui/ButtonLoading";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
 import useAuth from "../hooks/context/useAuth";
+
 
 const Login = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("")
   const [username, setUsername] = useState("")
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  
+  const { onLogin } = useAuth()
+  const handleLogin = (username: string, password: string) => async () => {
+    setIsLoading(true)
+    await onLogin(username, password)
+    setIsLoading(false)
+  }
 
-  const { handleLogin, isAuthenticated } = useAuth();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+
   useEffect(() => {
     if (isAuthenticated) navigate("/dashboard")
   }, [isAuthenticated, navigate])
@@ -67,10 +78,10 @@ const Login = () => {
           </div>
         </div>
         <ButtonLoading
-          isLoading={false}
+          isLoading={isLoading}
           className="w-full"
           text="Login"
-          onClick={() => handleLogin(username, password)}
+          onClick={handleLogin(username, password)}
         />
       </form>
     </PublicLayout>

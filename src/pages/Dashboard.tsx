@@ -4,15 +4,9 @@ import SummaryCard from "../components/Dashboard/SummaryCard";
 import ActivityListItem from "../components/Dashboard/ActivityListItem";
 import OrdersTable from "../components/Dashboard/OrdersTable";
 import Carrousel from "../components/ui/Carrousel";
-import { useLoading } from "../hooks/context/useLoading";
-import useAlert from "../hooks/context/useAlert";
 
 export default function Dashboard() {
-  const { setLoading } = useLoading();
-  const {showAlert} = useAlert()
-  const { dashboardData } = useDashboard(setLoading, showAlert);
-
-  const { summary, orders, recentActivities } = dashboardData;
+  const { summary, orders, recentActivities } = useDashboard();
 
   return (
     <PrivateLayout>

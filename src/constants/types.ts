@@ -49,6 +49,11 @@ export type TFormDetailsOrder = {
   onChangeValue: (property: string, value: any) => void
 }
 
+export type TFormDetailsOrderType = {
+  order: IOrderDetails
+  onChangeValue: (property: string, value: any) => void
+}
+
 export type TabHeaderItemProps = {
   tabId: string
   icon?: LucideIcon
@@ -72,7 +77,7 @@ export type TAlertContextProvider = {
 
 export type TAuthContextType = {
   isAuthenticated: boolean
-  handleLogin: (username: string, password: string) => void
+  handleLogin: (username: string, password: string) => Promise<boolean>
   handleLogout: () => void
   user: IUser
 }

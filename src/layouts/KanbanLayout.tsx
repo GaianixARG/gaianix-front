@@ -1,14 +1,14 @@
 import KanbanColumn from "../components/Ordenes/KanbanColumn";
 import useOrders from "../hooks/useOrders";
 import Drawer from "../components/ui/Drawer/Drawer";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import FormDetailsOrder from "../components/Ordenes/FormDetailsOrder";
-import { getArrayFromEnum, setDeepValue } from "../constants/utils";
+import { getArrayFromEnum } from "../constants/utils";
 import { EStatus, type EOrderType } from "../constants/enums";
 import type { IOrderDetails } from "../constants/interfaces";
 import useButton from "../hooks/useButton";
-import useAlert from "../hooks/context/useAlert";
-import { useLoading } from "../hooks/context/useLoading";
+import { useOrderStore } from "../store/orderStore";
+import { useLoteStore } from "../store/loteStore";
 
 type Props = {
   title: string;
@@ -16,49 +16,56 @@ type Props = {
 };
 
 const KanbanLayout = ({ title, type }: Props) => {
-  const { setLoading } = useLoading();
-  const { showAlert } = useAlert()
+  const fetchOrders = useOrderStore(state => state.fetchOrders)
+  const resetOrders = useOrderStore(state => state.resetOrders)
+  useEffect(() => {
+    fetchOrders(type)
+    return () => {
+      resetOrders()
+    }
+  }, [type, fetchOrders, resetOrders])
+  
+  const fetchLotes = useLoteStore(state => state.fetchLotes)
+  useEffect(() => {
+    fetchLotes()
+  }, [fetchLotes])
+
   const {
     handleDropOrder,
     getOrdersByStatus,
-    newOrder,
     addNewOrder,
     updateOrder
-  } = useOrders(type, setLoading, showAlert);
+  } = useOrders();
 
   const { handleToggleDrawer } = useButton({
     dataDrawerTarget: "drawer-order",
   });
   const estados = useMemo(() => getArrayFromEnum(EStatus).map(x => x.value as EStatus), [])
 
-  const [orderSelected, setOrderSelected] = useState(newOrder);
-  const handleSelectOrder = (orderId: string, status: EStatus) => {
-    const order = getOrdersByStatus(status).find((o) => o.id === orderId);
-    if (order) setOrderSelected(order);
-    else {
-      newOrder.status = status;
-      setOrderSelected(newOrder);
-    }
-    handleToggleDrawer("open");
-  };
-
-  const handleChangeProperty = (property: string, value: any) => {
-    setOrderSelected((prev) => setDeepValue(prev, property, value));
-  };
-
   const handleCreateNewOrder = (order: IOrderDetails) => {
     addNewOrder(order)
     handleToggleDrawer("close")
+  }
+
+  const handleUpdateOrder = (order: IOrderDetails) => {
+    updateOrder(order)
+    handleToggleDrawer("close")
+  }
+
+  const selectOrder = useOrderStore(state => state.selectOrder)
+  const onSelectOrder = (orderId: string) => {
+    selectOrder(orderId)
+    handleToggleDrawer("open")
   }
 
   return (
     <>
       <Drawer id="drawer-order" closeButton>
         <FormDetailsOrder
-          order={orderSelected}
-          onChangeValue={handleChangeProperty}
+          key={`form_details_${type}`}
+          type={type}
           onCreate={handleCreateNewOrder}
-          onUpdate={updateOrder}
+          onUpdate={handleUpdateOrder}
         />
       </Drawer>
       {title !== "" && <h1 className="text-2xl font-bold text-accent mb-6">{title}</h1>}
@@ -69,7 +76,7 @@ const KanbanLayout = ({ title, type }: Props) => {
             status={status}
             orders={getOrdersByStatus(status)}
             onDropOrder={handleDropOrder}
-            onSelectOrder={handleSelectOrder}
+            onSelectOrder={onSelectOrder}
           />
         })}
       </div>

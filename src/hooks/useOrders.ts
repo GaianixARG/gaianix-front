@@ -1,153 +1,48 @@
-import { useEffect, useState } from "react";
-import { orderService } from "../services/orderService";
-import type { FLoading, FShowAlert } from "../constants/types";
-import type { IOrder, IOrderBaseDetails, IOrderDetails } from "../constants/interfaces";
-import { EDistanciaSiembra, EOrderType, EPrioridad, ESeed, EStatus } from "../constants/enums";
-import useCalendar from "./useCalendar";
+import type { IOrderDetails } from "../constants/interfaces"
+import { EStatus } from "../constants/enums"
+import { useOrderStore } from "../store/orderStore"
+import { useAlertStore } from "../store/alertStore"
 
-const _initialOrders: IOrder[] = [];
+const useOrders = () => {
+  const orders = useOrderStore(state => state.orders)
+  const updateStatusOrder = useOrderStore(state => state.updateStatusOrder)
+  const createNewOrder = useOrderStore(state => state.createNewOrder)
+  const updateOrder = useOrderStore(state => state.updateOrder)
 
-const useOrders = (type: EOrderType, setLoading: FLoading, showAlert: FShowAlert) => {
-  const {formatToValue} = useCalendar()
-  const [orders, setOrders] = useState(_initialOrders);
+  const showAlert = useAlertStore(state => state.showAlert)
 
   const getOrdersByStatus = (status: EStatus) => {
-    return orders.filter((order) => order.status === status);
-  };
+    return orders.filter((order) => order.status === status)
+  }
 
   const handleDropOrder = (orderId: string, newStatus: EStatus) => {
-    setOrders((prev) =>
-      prev.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
-  };
+    updateStatusOrder(orderId, newStatus)
+  }
 
   const addNewOrder = async (order: IOrderDetails) => {
-    let huboError = false
-    let msj = ""
-    try {
-      setLoading(true)
-      const newOrder = (await orderService.create(order)).data;
-      setOrders((prev) => [...prev, newOrder]);
-      msj = `${newOrder.codigo} - ${newOrder.title}`
-    } catch (error: any) {
-      huboError = true
-      msj = error.message
-    } finally {
-      setLoading(false)
-      showAlert({
-        type: huboError ? "error" : "success",
-        message: huboError ? "Error:" : ("Orden creada exitosamente - " + msj),
-      });
-    }
-  };
+    const newOrder = await createNewOrder(order)
+    const exito = newOrder != null
+    showAlert({
+      type: exito ? "success" : "error",
+      message: exito ? `Orden ${newOrder.codigo} creada exitosamente` : "Error al crear la orden"
+    })
+  }
 
-  const updateOrder = async (order: IOrderDetails) => {
-    let huboError = false
-    let msj = ""
-    try {
-      setLoading(true)
-      const updatedOrder = (await orderService.update(order)).data;
-      setOrders((prev) =>
-        prev.map((order) => (order.id === updatedOrder.id ? updatedOrder : order))
-      );
-      msj = `${updatedOrder.codigo} - ${updatedOrder.title}`
-    } catch (error: any) {
-      huboError = true
-      msj = error.message
-    } finally {
-      setLoading(false)
-      showAlert({
-        type: huboError ? "error" : "success",
-         message: huboError ? "Error:" : ("Orden actualizada exitosamente - " + msj),
-      });
-    }
-  };
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        setLoading(true);
-        const response = await orderService.getByType(type)
-        setOrders(response.data)
-      } catch (error: any) {
-        showAlert({
-          type: "error",
-          message: error.message,
-        })
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, [setLoading, showAlert, type]);
-
-  const baseOrder: IOrderBaseDetails = {
-    id: "",
-    codigo: "",
-    lote: {
-      id: "",
-      codigo: "",
-      campo: {
-        id: "",
-        nombre: ""
-      }
-    },
-    type: type,
-    status: EStatus.Pendiente,
-    title: "",
-    prioridad: EPrioridad.Alta
-  };
-
-  const initialPerType: Record<EOrderType, IOrderDetails> = {
-    [EOrderType.Siembra]: {
-      ...baseOrder,
-      type: EOrderType.Siembra,
-      siembra: {
-        cantidadHectareas: 0,
-        distanciaSiembra: EDistanciaSiembra.Cercana,
-        fechaMaxSiembra: formatToValue(new Date()),
-        id: "",
-        datosSemilla: {
-          id: "",
-          semilla: {
-            id: "",
-            name: "",
-            type: ESeed.Maiz,
-            provider: ""
-          },
-          cantidadSemillasHa: 0,
-          fertilizante: ""
-        }
-      },
-    },
-    [EOrderType.Fertilizacion]: {
-      ...baseOrder,
-      type: EOrderType.Fertilizacion,
-      fertilizacion: { fertilizante: "", dosisKgHa: 0, metodo: "" },
-    },
-    [EOrderType.Cosecha]: {
-      ...baseOrder,
-      type: EOrderType.Cosecha,
-      cosecha: {
-        fechaCosecha: "",
-        rendimientoEstimado: 0,
-        maquinaria: "",
-        humedad: 0,
-      },
-    },
-  };
+  const updateOrderDetails = async (order: IOrderDetails) => {
+    const exito = await updateOrder(order)
+    showAlert({
+      type: exito ? "success" : "error",
+      message: exito ? `Orden ${order.codigo} actualizada exitosamente` : "Error al actualizar la orden"
+    })
+  }
 
   return {
     orders,
     getOrdersByStatus,
     handleDropOrder,
-    newOrder: initialPerType[type],
     addNewOrder,
-    updateOrder
-  };
-};
+    updateOrder: updateOrderDetails
+  }
+}
 
-export default useOrders;
+export default useOrders

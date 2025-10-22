@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { IDashboard } from "../constants/interfaces";
 import {dashboardService} from "../services/dashboardService";
-import type { FLoading, FShowAlert } from "../constants/types";
+import { useAlertStore } from "../store/alertStore";
 
 const initialDashboardData: IDashboard = {
   summary: [],
@@ -9,12 +9,12 @@ const initialDashboardData: IDashboard = {
   recentActivities: [],
 };
 
-const useDashboard = (setLoading: FLoading, showAlert: FShowAlert) => {
+const useDashboard = () => {
   const [dashboardData, setDashboardData] = useState(initialDashboardData);
+  const showAlert = useAlertStore(state => state.showAlert)
 
   useEffect(() => {
     const fetchDashboardData = async () => {
-      setLoading(true);
       try {
         const data = await dashboardService.getDashboardData();
         setDashboardData(data);
@@ -23,15 +23,13 @@ const useDashboard = (setLoading: FLoading, showAlert: FShowAlert) => {
           type: "error",
           message: "Error al cargar los datos",
         })
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchDashboardData();
-  }, [setLoading, showAlert]);
+  }, [showAlert]);
 
-  return { dashboardData };
+  return { ...dashboardData };
 };
 
 export default useDashboard;

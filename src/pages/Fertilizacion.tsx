@@ -8,6 +8,8 @@ import TabHeaderItem from "../components/ui/Tabs/TabHeaderItem";
 import type { TabHeaderItemProps } from "../constants/types";
 import { Grid2x2Plus, Kanban } from "lucide-react";
 import FertilizersPage from "../components/Fertilizantes/FertilizersPage";
+import { useFertilizerStore } from "../store/fertilizerStore";
+import { useEffect } from "react";
 
 const TABS_FERTILIZACION = {
   ORDERS: "orders-cards",
@@ -33,22 +35,26 @@ const tabsSiembra: TabHeaderItemProps[] = [
 ];
 
 const Fertilizacion = () => {
+  const fetchFertilizers = useFertilizerStore(state => state.fetchFertilizers)  
+  useEffect(() => {
+    fetchFertilizers()
+  }, [fetchFertilizers])
+
   return (
     <PrivateLayout>
-      
       <TabHeader tabContentId={contentTabId}>
           {tabsSiembra.map((tab) => (
             <TabHeaderItem key={tab.tabId} {...tab} />
           ))}
-        </TabHeader>
-        <TabContent id={contentTabId} className="flex-1">
-          <TabContentItem id={TABS_FERTILIZACION.ORDERS} active>
-            <KanbanLayout title="" type={EOrderType.Fertilizacion} />
-          </TabContentItem>
-          <TabContentItem id={TABS_FERTILIZACION.FERTILIZERS}>
-            <FertilizersPage />
-          </TabContentItem>
-        </TabContent>
+      </TabHeader>
+      <TabContent id={contentTabId} className="flex-1">
+        <TabContentItem id={TABS_FERTILIZACION.ORDERS} active>
+          <KanbanLayout key={`kb_${EOrderType.Fertilizacion}`} title="" type={EOrderType.Fertilizacion} />
+        </TabContentItem>
+        <TabContentItem id={TABS_FERTILIZACION.FERTILIZERS}>
+          <FertilizersPage />
+        </TabContentItem>
+      </TabContent>
     </PrivateLayout>
   );
 };

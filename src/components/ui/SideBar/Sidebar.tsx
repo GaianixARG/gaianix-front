@@ -3,10 +3,20 @@ import Button from "../Button";
 import logo from "../../../assets/images/logo.png";
 import { PRIVATE_ROUTES_ICONS } from "../../../constants/routes";
 import NavTab from "./NavTab";
-import useAuth from "../../../hooks/context/useAuth";
+import { useAuthStore } from "../../../store/authStore";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  const { handleLogout, user, isAuthenticated } = useAuth();
+  const navigate = useNavigate()
+  const user = useAuthStore(state => state.user)
+  const handleLogout = useAuthStore(state => state.handleLogout)
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
+
+  const onLogout = () => {
+    handleLogout()
+    navigate("/login")
+  }
+
   return (
     <header className="min-w-full">
       <div className="bg-accent p-2 sm:p-0 sm:hidden flex items-center">
@@ -60,7 +70,7 @@ const Sidebar = () => {
                 label="Desconectarse"
                 enabled={isAuthenticated}
                 icon={LogOut}
-                onClick={handleLogout}
+                onClick={onLogout}
               />
             </li>
           </ul>

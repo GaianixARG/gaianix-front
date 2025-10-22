@@ -1,113 +1,51 @@
-import { useEffect, useState } from "react";
 import type { ISeed } from "../constants/interfaces";
-import type { FLoading, FShowAlert } from "../constants/types";
-import { seedService } from "../services/seedService";
-import { ESeed } from "../constants/enums";
+import { useAlertStore } from "../store/alertStore";
+import { useSeedStore } from "../store/seedStore";
 
-const initialSeed = { id: "", name: "", type: ESeed.Maiz, provider: "" };
+const useSeeds = () => {
+  const showAlert = useAlertStore(state => state.showAlert)
 
-const useSeeds = (setLoading: FLoading, showAlert: FShowAlert) => {
-  const [seeds, setSeeds] = useState<ISeed[]>([]);
-  const [editingSeed, setEditingSeed] = useState<ISeed>(initialSeed);
+  const updateSeed = useSeedStore(state => state.updateSeed)
+  const createNewSeed = useSeedStore(state => state.createNewSeed)
+  const deleteSeed = useSeedStore(state => state.deleteSeed)
 
-  const handleCreate = () => {
-    setEditingSeed(initialSeed);
+
+  const handleDelete = async (id: string) => {
+    const exito = await deleteSeed(id)
+    showAlert({
+      type: exito ? "success" : "error",
+      message: exito ? "Semilla eliminada correctamente!" : "Error al eliminar la semilla",
+    })
   };
 
-  const handleEdit = (seed: ISeed) => {
-    setEditingSeed(seed);
-  };
-
-  const handleDelete = (id: string) => {
-    setLoading(true)
-    seedService.remove(id)
-      .then(() => {
-        setSeeds((prev) => prev.filter((s) => s.id !== id));
-        showAlert({
-          type: "success",
-          message: "Semilla eliminada correctamente!",
-        })
-      })
-      .catch((err) => {
-        showAlert({
-          type: "error",
-          message: err.message,
-        })
-      })
-      .finally(() => setLoading(false))
-  };
-
-  const createNewSeed = (seed: ISeed) => {
-    seedService.create(seed)
-      .then((res) => {
-          setSeeds((prev) => [...prev, res.data]);
-          showAlert({
-            type: "success",
-            message: `Semilla ${res.data.name} creada correctamente`,
-          })
-      })
-      .catch((err) => {
-        showAlert({
-          type: "error",
-          message: err.message
-        })
-      })
-      .finally(() => setLoading(false))
+  const handleCreateNewSeed = async (seed: ISeed) => {
+    const newSeed = await createNewSeed(seed)
+    const exito = newSeed != null
+    showAlert({
+      type: exito ? "success" : "error",
+      message: exito ? `Semilla ${newSeed.name} creada correctamente!`: "Error al crear la semilla",
+    })
   }
 
-  const updateSeed = (id: string, seed: ISeed) => {
-    seedService.update(id, seed)
-      .then((res) => {
-          setSeeds((prev) => prev.map((s) => (s.id === seed.id ? res.data : s)));
-          showAlert({
-            type: "success",
-            message: "Semilla actualizada correctamente!",
-          })
-      })
-      .catch((err) => {
-        showAlert({
-          type: "error",
-          message: err.message
-        })
-      })
-      .finally(() => setLoading(false))
+  const handleUpdateSeed = async (seed: ISeed) => {
+    const exito = await updateSeed(seed)
+    showAlert({
+      type: exito ? "success" : "error",
+      message: exito ? "Semilla actualizada correctamente!" : "Error al actualizar la semilla",
+    })
   }
 
-  const handleSave = (seed: ISeed) => {
-    if (editingSeed.id !== "") {
-      updateSeed(editingSeed.id, seed)
+  const handleSave = async (seed: ISeed) => {
+    if (seed.id !== "") {
+      handleUpdateSeed(seed)
     } else {
-      // create
-      createNewSeed(seed)
+      handleCreateNewSeed(seed)
     }
   };
 
-  useEffect(() => {
-      const fetchSeeds = async () => {
-        try {
-          setLoading(true)
-          const response = await seedService.getAll()
-          setSeeds(response.data)
-        } catch (error: any) {
-          showAlert({
-            type: "error",
-            message: error.message,
-          })
-        } finally {
-          setLoading(false)
-        }
-      };
-      fetchSeeds()
-    }, [setLoading, showAlert]);
-
   return {
-    seeds,
-    editingSeed,
-    setEditingSeed,
-    handleCreate,
-    handleEdit,
     handleDelete,
-    handleSave,
+    handleSave
   };
 };
 

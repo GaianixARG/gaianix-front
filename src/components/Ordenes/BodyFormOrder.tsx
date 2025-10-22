@@ -1,11 +1,17 @@
 import { EPrioridad } from "../../constants/enums";
-import type { TFormDetailsOrder } from "../../constants/types";
+import type { TFormDetailsOrderType } from "../../constants/types";
 import { getArrayFromEnum } from "../../constants/utils";
-import useInfoCampos from "../../hooks/useInfoCampos";
+import { useLoteStore } from "../../store/loteStore";
+import Input from "../ui/Input";
 import Select from "../ui/Select";
 
-const BodyFormOrder = ({ order, onChangeValue }: TFormDetailsOrder) => {
-  const { lotes } = useInfoCampos();
+const BodyFormOrder = ({ order, onChangeValue }: TFormDetailsOrderType) => {
+  const lotes = useLoteStore(state => state.lotes)
+
+  const handleChangeLote = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onChangeValue("lote.id", e.target.value)
+    onChangeValue("lote.codigo", e.target.selectedOptions[0].text)
+  }
 
   return (
     <>
@@ -16,13 +22,12 @@ const BodyFormOrder = ({ order, onChangeValue }: TFormDetailsOrder) => {
         >
           Título
         </label>
-        <input
+        <Input
           type="text"
-          id="title"
-          className="text-sm rounded-lg block w-full p-2.5 border bg-gray-700 border-gray-600 placeholder-accent-light text-white focus-visible:ring-1 focus-visible:ring-primary-light focus-visible:outline-none"
+          id="title"          
           placeholder="Ej: Cosecha de maiz"
           required
-          defaultValue={order.title}
+          value={order.title}
           onChange={(e) => onChangeValue("title", e.target.value)}
         />
       </div>
@@ -39,7 +44,7 @@ const BodyFormOrder = ({ order, onChangeValue }: TFormDetailsOrder) => {
             addOptionEmpty
             defaultValue={order.lote.id}
             required
-            onChange={(value) => onChangeValue("lote.id", value)}
+            onChange={handleChangeLote}
           />
         </div>
 
@@ -52,7 +57,7 @@ const BodyFormOrder = ({ order, onChangeValue }: TFormDetailsOrder) => {
             options={getArrayFromEnum(EPrioridad)}
             defaultValue={order.prioridad}
             required
-            onChange={(value) => onChangeValue("prioridad", value)}
+            onChange={({ target }) => onChangeValue("prioridad", target.value)}
           />
         </div>
       </div>

@@ -9,7 +9,7 @@ type Props = {
   id?: string;
   options: TOption[];
   defaultValue?: string | number;
-  onChange?: (value: string | number) => void;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   addOptionEmpty?: boolean;
 } & React.SelectHTMLAttributes<HTMLSelectElement>;
 
@@ -26,7 +26,7 @@ const Select = ({
     <select
       id={selectId}
       value={defaultValue}
-      onChange={(e) => onChange && onChange(e.target.value)}
+      onChange={onChange}
       className="text-sm rounded-lg block w-full p-2.5 border bg-gray-700 border-gray-600 placeholder-accent-light text-white focus-visible:ring-1 focus-visible:ring-primary-light focus-visible:outline-none"
     >
       {addOptionEmpty === true && (

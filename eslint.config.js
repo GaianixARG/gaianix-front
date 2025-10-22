@@ -25,7 +25,8 @@ export default tseslint.config([
     },
     rules: {
       "@typescript-eslint/strict-boolean-expressions": "error",
-      "@typescript-eslint/no-explicit-any": ["off"]
+      "@typescript-eslint/no-explicit-any": ["off"],
+      "@typescript-eslint/explicit-function-return-type": "off"
     }
   },
 ])

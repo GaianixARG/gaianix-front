@@ -5,18 +5,18 @@ import {
   PUBLIC_ROUTES_COMPONENT,
   PRIVATE_ROUTES_COMPONENT,
 } from "../constants/routes";
-import GlobalLoader from "../components/ui/GlobalLoader";
+import Loader from "../components/ui/Loader";
 
 export default function AppRouter() {
   return (
-    <Suspense>
-      <GlobalLoader />
+      
+    <Suspense fallback={<Loader type="primary" size="xl" isLoading  isGlobal/>}>
       <Routes>
         {PUBLIC_ROUTES_COMPONENT.map(({path, component: Component}) => (
-          <Route key={path} path={path} element={<Component />} />
+          <Route key={path} path={path} element={<Component key={`com_${path}`} />} />
         ))}
         {PRIVATE_ROUTES_COMPONENT.map(({path, component: Component}) => (
-          <Route key={path} path={path} element={<Component />} />
+          <Route key={path} path={path} element={<Component key={`com_${path}`} />} />
         ))}
         <Route
           path={NOT_FOUND_ROUTE_COMPONENT.path}

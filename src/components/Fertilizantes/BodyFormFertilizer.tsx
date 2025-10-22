@@ -1,24 +1,39 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useState } from "react"
 import type { IFertilizer } from "../../constants/interfaces"
 import DrawerBody from "../ui/Drawer/DrawerBody"
 import DrawerHeader from "../ui/Drawer/DrawerHeader"
 import Input from "../ui/Input"
 import { BugOff } from "lucide-react"
 import Button from "../ui/Button"
+import { setDeepValue } from "../../constants/utils"
+import { useFertilizerStore } from "../../store/fertilizerStore"
 
 type Props = {
-  fertilizer: IFertilizer;
   onSave: (fertilizer: IFertilizer) => void
-  onChangeValue: (property: string, value: any) => void
 };
 
-const BodyFormFertilizer = ({ fertilizer, onSave, onChangeValue }: Props) => {
+const initialFertilizer = { id: "", name: "" }
+
+const BodyFormFertilizer = ({ onSave }: Props) => {
+  const [fertilizerDetails, setFertilizerDetails] = useState<IFertilizer>(initialFertilizer)
+  const fertilizers = useFertilizerStore(state => state.fertilizers)
+  const idxFertSelected = useFertilizerStore(state => state.fertilizerSelected)
+
+  useEffect(() => {
+    if (idxFertSelected !== -1) setFertilizerDetails(fertilizers[idxFertSelected])
+    else setFertilizerDetails(initialFertilizer)
+  }, [idxFertSelected, fertilizers])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(fertilizer);
+    onSave(fertilizerDetails);
   };
 
-  const isEditing = useMemo(() => fertilizer.id !== '', [fertilizer.id]);
+  const isEditing = fertilizerDetails.id !== ''
+
+  const onChangeValue = (property: string, value: any) => {
+    setFertilizerDetails((prev) => setDeepValue(prev, property, value))
+  }
 
   return (
     <>
@@ -31,7 +46,7 @@ const BodyFormFertilizer = ({ fertilizer, onSave, onChangeValue }: Props) => {
           <label className="block text-sm font-medium text-accent-light">
               Nombre
           </label>
-          <Input name="name" placeholder="Nombre" value={fertilizer.name} onChange={(e) => onChangeValue("name", e.target.value)} />
+          <Input name="name" placeholder="Nombre" value={fertilizerDetails.name} onChange={(e) => onChangeValue("name", e.target.value)} />
         </div>
         <Button
           tipo="primary-light"

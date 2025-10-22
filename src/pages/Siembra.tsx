@@ -8,6 +8,9 @@ import { Grid2x2Plus, Kanban } from "lucide-react";
 import type { TabHeaderItemProps } from "../constants/types";
 import SeedsPage from "../components/Semillas/SeedsPage";
 import { EOrderType } from "../constants/enums";
+import { useFertilizerStore } from "../store/fertilizerStore";
+import { useSeedStore } from "../store/seedStore";
+import { useEffect } from "react";
 
 const TABS_SIEMBRA = {
   ORDERS: "orders-cards",
@@ -33,6 +36,16 @@ const tabsSiembra: TabHeaderItemProps[] = [
 ];
 
 const Siembra = () => {
+  const fetchFertilizers = useFertilizerStore(state => state.fetchFertilizers)
+  useEffect(() => {
+    fetchFertilizers()
+  }, [fetchFertilizers])
+
+  const fetchSeeds = useSeedStore(state => state.fetchSeeds)
+  useEffect(() => {
+    fetchSeeds()
+  }, [fetchSeeds])
+
   return (
     <PrivateLayout>
         <TabHeader tabContentId={contentTabId}>
@@ -42,7 +55,7 @@ const Siembra = () => {
         </TabHeader>
         <TabContent id={contentTabId} className="flex-1">
           <TabContentItem id={TABS_SIEMBRA.ORDERS} active>
-            <KanbanLayout title="" type={EOrderType.Siembra} />
+            <KanbanLayout key={`kb_${EOrderType.Siembra}`} title="" type={EOrderType.Siembra} />
           </TabContentItem>
           <TabContentItem id={TABS_SIEMBRA.SEEDS}>
             <SeedsPage />
