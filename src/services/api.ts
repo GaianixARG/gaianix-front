@@ -63,5 +63,4 @@ export class Api {
     return this.request(endpoint, { method: "DELETE" });
   }
 }
-
-export const api = new Api("http://localhost:3000/api");
+export const api = new Api(import.meta.env.VITE_API);
