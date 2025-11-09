@@ -1,4 +1,3 @@
-import type { IOrder } from "../../constants/interfaces"
 import { FilterIcon, PlusIcon, SortAscIcon } from "lucide-react"
 import OrderCard from "./OrderCard"
 import Button from "../ui/Button"
@@ -12,12 +11,13 @@ import {
 } from "../../constants/conversiones"
 import { EStatus } from "../../constants/enums"
 import { useAlertStore } from "../../store/alertStore"
+import { useOrderStore } from "../../store/orderStore"
+import type { TColors } from "../../constants/types"
 
 type Props = {
   status: EStatus
-  orders: IOrder[]
   onDropOrder: (orderId: string, newStatus: EStatus) => void
-  onSelectOrder: (orderId: string) => void
+  onSelectOrder: (orderId: string, status: EStatus) => void
 }
 
 const createElementForDragImage = (e: React.DragEvent) => {
@@ -38,12 +38,17 @@ const handleDragStart = (e: React.DragEvent, orderId: string) => {
   createElementForDragImage(e)
 }
 
+const getClaseTextoTituloColumna = (colorStatus: TColors) => `uppercase ${TEXT_PER_STATUS_COLOR[colorStatus]} font-bold me-1`
+const getBgContainer = (isActive: boolean, colorStatus: TColors) => `p-4 rounded-xl shadow-md transition-colors w-full min-w-0 
+  ${isActive ? BG_PER_STATUS_COLOR[colorStatus] : "bg-gray-200/50"}`
+
 const KanbanColumn = ({
   status,
-  orders,
   onDropOrder,
   onSelectOrder
 }: Props) => {
+  const orders = useOrderStore(state => state.orders).filter(x => x.status === status)
+
   const showAlert = useAlertStore(state => state.showAlert)
   const [isActive, setIsActive] = useState(false)
 
@@ -66,14 +71,11 @@ const KanbanColumn = ({
   }
 
   const colorStatus = COLOR_PER_STATUS[status]
-
-  const claseTextoTituloColumna = `uppercase ${TEXT_PER_STATUS_COLOR[colorStatus]} font-bold me-1`
-  const bgContainer = `p-4 rounded-xl shadow-md transition-colors w-full min-w-0 ${
-    isActive ? BG_PER_STATUS_COLOR[colorStatus] : "bg-gray-200/50"
-    }`
+  const claseTextoTituloColumna = getClaseTextoTituloColumna(colorStatus)
+  const bgContainer = getBgContainer(isActive, colorStatus)
   
-  const handleSelectOrder = (orderId: string) => () => {
-    onSelectOrder(orderId)
+  const handleSelectOrder = (orderId: string, status: EStatus) => () => {
+    onSelectOrder(orderId, status)
   }
 
   return (
@@ -97,7 +99,7 @@ const KanbanColumn = ({
             type="button"
             tipo="white"
             className="p-1"
-            onClick={handleSelectOrder("")}
+            onClick={handleSelectOrder("", status)}
             title="Crear nueva orden"
           >
             <PlusIcon className="w-4 h-4" />
@@ -151,7 +153,7 @@ const KanbanColumn = ({
               key={order.id}
               {...order}
               onDragStart={handleDragStart}
-              onClick={handleSelectOrder(order.id)}
+              onClick={handleSelectOrder(order.id, status)}
             />
           ))
         ) : (

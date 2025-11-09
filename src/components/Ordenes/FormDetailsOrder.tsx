@@ -38,26 +38,30 @@ const FormDetailsOrder = ({
   onUpdate,
 }: Props) => {
   const orders = useOrderStore(state => state.orders)
-  const idxOrderSelected = useOrderStore(state => state.orderSelected)
-  const clearSelection = useOrderStore(state => state.selectOrder)
+  const orderSelectedStore = useOrderStore(state => state.orderSelected)
+  const clearSelection = useOrderStore(state => state.clearSelection)
 
   const [orderDetails, setOrderDetails] = useState<IOrderDetails | null>()
 
   useEffect(() => {
-    const orderSelected = orders[idxOrderSelected]
+    const orderSelected = orders[orderSelectedStore.idx]
     if (orderSelected == null) {
-      setOrderDetails(initialPerType[type]);
+      const initial = initialPerType[type]
+      initial.status = orderSelectedStore.status
+      setOrderDetails(initial)
       return;
     }
 
     if (orderSelected.type !== type) {
-      clearSelection("");
-      setOrderDetails(initialPerType[type]);
+      clearSelection()
+      const initial = initialPerType[type]
+      initial.status = orderSelectedStore.status
+      setOrderDetails(initial)
       return;
     }
 
     setOrderDetails(orderSelected);
-  }, [type, idxOrderSelected, orders, clearSelection])
+  }, [type, orderSelectedStore, orders, clearSelection])
 
 
   const handleChangeProperty = (property: string, value: any) => {

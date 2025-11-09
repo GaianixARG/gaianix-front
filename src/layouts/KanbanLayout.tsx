@@ -32,7 +32,6 @@ const KanbanLayout = ({ title, type }: Props) => {
 
   const {
     handleDropOrder,
-    getOrdersByStatus,
     addNewOrder,
     updateOrder
   } = useOrders();
@@ -53,8 +52,8 @@ const KanbanLayout = ({ title, type }: Props) => {
   }
 
   const selectOrder = useOrderStore(state => state.selectOrder)
-  const onSelectOrder = (orderId: string) => {
-    selectOrder(orderId)
+  const onSelectOrder = (orderId: string, status: EStatus) => {
+    selectOrder(orderId, status)
     handleToggleDrawer("open")
   }
 
@@ -74,7 +73,6 @@ const KanbanLayout = ({ title, type }: Props) => {
           return <KanbanColumn
             key={status}
             status={status}
-            orders={getOrdersByStatus(status)}
             onDropOrder={handleDropOrder}
             onSelectOrder={onSelectOrder}
           />

@@ -4,17 +4,12 @@ import { useOrderStore } from "../store/orderStore"
 import { useAlertStore } from "../store/alertStore"
 
 const useOrders = () => {
-  const orders = useOrderStore(state => state.orders)
   const updateStatusOrder = useOrderStore(state => state.updateStatusOrder)
   const createNewOrder = useOrderStore(state => state.createNewOrder)
   const updateOrder = useOrderStore(state => state.updateOrder)
 
   const showAlert = useAlertStore(state => state.showAlert)
-
-  const getOrdersByStatus = (status: EStatus) => {
-    return orders.filter((order) => order.status === status)
-  }
-
+  
   const handleDropOrder = (orderId: string, newStatus: EStatus) => {
     updateStatusOrder(orderId, newStatus)
   }
@@ -37,8 +32,6 @@ const useOrders = () => {
   }
 
   return {
-    orders,
-    getOrdersByStatus,
     handleDropOrder,
     addNewOrder,
     updateOrder: updateOrderDetails

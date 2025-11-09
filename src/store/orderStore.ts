@@ -5,15 +5,26 @@ import { EOrderType, EStatus } from '../constants/enums'
 import { orderService } from '../services/orderService'
 import { withLoading } from './middlewares/withLoading'
 
+export interface ISelectedOrder {
+  idx: number
+  status: EStatus
+}
 export type TOrderState = {
   orders: IOrder[]
-  orderSelected: number
+  orderSelected: ISelectedOrder
   fetchOrders: (type: EOrderType) => Promise<boolean>
-  selectOrder: (orderId: string) => void
+  selectOrder: (orderId: string, status: EStatus) => void
+  clearSelection: () => void
   updateStatusOrder: (orderId: string, status: EStatus) => void
   createNewOrder: (order: IOrderDetails) => Promise<IOrder | null>
   updateOrder: (order: IOrderDetails) => Promise<boolean>
   resetOrders: () => void
+}
+
+
+const initialOrderSelected: ISelectedOrder = {
+  idx: - 1,
+  status: EStatus.Pendiente
 }
 
 export const useOrderStore = create<TOrderState>()(
@@ -22,12 +33,12 @@ export const useOrderStore = create<TOrderState>()(
       (set, get) => (
         {
           orders: [],
-          orderSelected: -1,
+          orderSelected: initialOrderSelected,
 
           fetchOrders: async (type: EOrderType) => {
             try {
               const response = await orderService.getByType(type)
-              set({ orders: response.data, orderSelected: -1 })
+              set({ orders: response.data, orderSelected: initialOrderSelected })
 
               return true
             } catch {
@@ -35,24 +46,39 @@ export const useOrderStore = create<TOrderState>()(
             }
           },
 
-          selectOrder: (orderId: string) => {
-            set(state => ({ orderSelected: state.orders.findIndex(o => o.id == orderId) }))
+          selectOrder: (orderId: string, status: EStatus) => {
+            set(state => {
+              const idxSelected = state.orders.findIndex(o => o.id == orderId)
+              return {
+                orderSelected: {
+                  idx: idxSelected,
+                  status
+                }
+              }
+            })
           },
 
-          updateStatusOrder: (orderId: string, status: EStatus) => {
-            const { orders, updateOrder } = get()
+          clearSelection: () => {
+            set({ orderSelected: initialOrderSelected })
+          },
+
+          updateStatusOrder: async (orderId: string, status: EStatus) => {
+            await orderService.updateStatus(orderId, status)
+
+            const { orders } = get()
             
-            const order = orders.find(o => o.id === orderId)
-            if (!order) return
-            
-            order.status = status
-            updateOrder(order)
+            const newOrders = structuredClone(orders)
+            const idx = newOrders.findIndex(o => o.id === orderId)
+            if (idx === -1) return
+            newOrders[idx].status = status
+
+            set({ orders: newOrders })
           },
 
           createNewOrder: async (order: IOrderDetails) => {
             try {
               const newOrder = (await orderService.create(order)).data
-              set(state => ({ orders: [...state.orders, newOrder], orderSelected: -1 }))
+              set(state => ({ orders: [...state.orders, newOrder], orderSelected: initialOrderSelected }))
               return newOrder
             } catch {
               return null
@@ -74,16 +100,17 @@ export const useOrderStore = create<TOrderState>()(
                 ...order
               }
 
-              set({ orders: newOrders, orderSelected: -1 })
+              set({ orders: newOrders, orderSelected: initialOrderSelected })
               return true
-            } catch {
+            } catch (error) {
+              console.log(error)
               return false
             }
           },
 
           resetOrders: () => set({
             orders: [],
-            orderSelected: -1
+            orderSelected: initialOrderSelected
           })
         }
       )

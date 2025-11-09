@@ -59,6 +59,13 @@ export class Api {
     });
   }
 
+  patch<T>(endpoint: string, body: any): Promise<TResponseApi<T>> {
+    return this.request(endpoint, {
+      method: "PATCH",
+      body: JSON.stringify(body)
+    });
+  }
+
   delete<T>(endpoint: string): Promise<TResponseApi<T>> {
     return this.request(endpoint, { method: "DELETE" });
   }

@@ -1,3 +1,4 @@
+import type { EStatus } from "../constants/enums";
 import type { IOrder, IOrderDetails } from "../constants/interfaces";
 import { api } from "./api";
 
@@ -6,7 +7,7 @@ export const orderService = {
   getById: (id: string) => api.get<IOrder>(`/orders/${id}`),
   getByType: (type: string) => api.get<IOrder[]>(`/orders?type=${type}`),
   create: (order: IOrderDetails) => api.post<IOrder>("/orders", order),
-  update: (order: IOrderDetails) =>
-    api.put<IOrder>(`/orders/${order.id}`, order),
+  update: (order: IOrderDetails) => api.put<IOrder>(`/orders/${order.id}`, order),
+  updateStatus: (orderId: string, status: EStatus) => api.patch<IOrder>(`/orders/${orderId}`, { id: orderId, status }),
   remove: (id: string) => api.delete<void>(`/orders/${id}`),
 };
