@@ -3,7 +3,7 @@
 export const storageService = {
   setItem: <T>(key: string, value: T): void => {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      sessionStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
       console.error(`Error setting item "${key}" to localStorage`, error);
     }
@@ -11,7 +11,7 @@ export const storageService = {
 
   getItem: <T>(key: string): T | null => {
     try {
-      const item = localStorage.getItem(key);
+      const item = sessionStorage.getItem(key);
       return item != null ? (JSON.parse(item) as T) : null;
     } catch (error) {
       console.error(`Error getting item "${key}" from localStorage`, error);
@@ -21,7 +21,7 @@ export const storageService = {
 
   removeItem: (key: string): void => {
     try {
-      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
     } catch (error) {
       console.error(`Error removing item "${key}" from localStorage`, error);
     }
@@ -29,7 +29,7 @@ export const storageService = {
 
   clearStorage: (): void => {
     try {
-      localStorage.clear();
+      sessionStorage.clear();
     } catch (error) {
       console.error("Error clearing localStorage", error);
     }

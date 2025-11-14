@@ -6,6 +6,7 @@ const useAuth = () => {
   const navigate = useNavigate()
   const showAlert = useAlertStore(state => state.showAlert)
   const handleLogin = useAuthStore(state => state.handleLogin)
+  const handleRefreshLogin = useAuthStore(state => state.handleRefreshLogin)
   const handleLogout = useAuthStore(state => state.handleLogout)
 
   const onLogout = () => {
@@ -24,9 +25,15 @@ const useAuth = () => {
     }
   }
 
+  const onRefreshLogin = async () => {
+    const exito = await handleRefreshLogin()
+    if (exito) navigate("/dashboard")
+  }
+
   return {
     onLogout,
-    onLogin
+    onLogin,
+    onRefreshLogin
   }
 };
 

@@ -3,13 +3,11 @@ import { useEffect, useState } from "react";
 import ButtonLoading from "../components/ui/ButtonLoading";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
-import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import useAuth from "../hooks/context/useAuth";
 
 
 const Login = () => {
-  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("")
@@ -19,7 +17,7 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
   
-  const { onLogin } = useAuth()
+  const { onLogin, onRefreshLogin } = useAuth()
   const handleLogin = (username: string, password: string) => async () => {
     setIsLoading(true)
     await onLogin(username, password)
@@ -29,8 +27,8 @@ const Login = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/dashboard")
-  }, [isAuthenticated, navigate])
+    if (isAuthenticated) onRefreshLogin()
+  }, [isAuthenticated, onRefreshLogin])
 
   return (
     <PublicLayout>

@@ -14,8 +14,11 @@ type Props = {
 
 const getColumnsSeed = ({ onEdit, onDelete }: Props) =>
   [
-    { key: "name", label: "Nombre" },
-    { key: "type", label: "Tipo", displayItem: (item: ISeed) => <Badge label={item.type} color={COLOR_SEMILLA[item.type]} className="py-1 px-3"  /> },
+    { key: "name", label: "Nombre", sortable: true },
+    {
+      key: "type", label: "Tipo", sortable: true,
+      displayItem: (item: ISeed) => <Badge label={item.type} color={COLOR_SEMILLA[item.type]} className="py-1 px-3" />
+    },
     {
       key: "actions",
       label: "Acciones",

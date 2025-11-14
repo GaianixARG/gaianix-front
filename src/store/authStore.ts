@@ -1,18 +1,13 @@
 import { create } from 'zustand'
-import type { IUser } from '../constants/interfaces'
+import type { IUserAuth } from '../constants/interfaces'
 import type { TAuthContextType } from '../constants/types'
 import { authService } from '../services/authService';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { storageService } from '../services/storage';
 
-const initialUser: IUser = {
-  id: "",
-  name: "",
-  username: "",
-  role: {
-    id: "",
-    name: ""
-  },
+const initialUser: IUserAuth = {
+  name: ""
+  //token: ""
 };
 
 export const KEY_AUTH_STORE = 'gaianix-user-storage'
@@ -26,8 +21,17 @@ export const useAuthStore = create<TAuthContextType>()(
         handleLogin: async (username: string, password: string) => {
           try {
             const userData = await authService.login(username, password)
-            set({ isAuthenticated: true, user: userData.data.user })
+            console.log(userData)
+            set({ isAuthenticated: true, user: userData.data })
             
+            return true
+          } catch {
+            return false
+          }
+        },
+        handleRefreshLogin: async () => {
+          try {
+            await authService.refreshAuth()            
             return true
           } catch {
             return false
@@ -43,6 +47,7 @@ export const useAuthStore = create<TAuthContextType>()(
     ),
     {
       name: KEY_AUTH_STORE,
+      storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated })
     }
   )

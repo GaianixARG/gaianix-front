@@ -8,9 +8,9 @@ type Props = {
 };
 
 const columnsOrderTable = [
-  { key: "type", label: "Tipo" },
+  { key: "type", label: "Tipo", sortable: true },
   { key: "lote", label: "Lote" },
-  { key: "dateOfCreation", label: "Fecha Alta" },
+  { key: "dateOfCreation", label: "Fecha Alta", sortable: true },
   {
     key: "status",
     label: "Estado",

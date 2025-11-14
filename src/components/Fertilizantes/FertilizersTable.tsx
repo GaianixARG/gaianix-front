@@ -12,7 +12,7 @@ type Props = {
 
 const getColumnsFertilizer = ({ onEdit, onDelete }: Props) =>
   [
-    { key: "name", label: "Nombre" },
+    { key: "name", label: "Nombre", sortable: true },
     {
       key: "actions",
       label: "Acciones",

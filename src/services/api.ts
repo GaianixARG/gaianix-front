@@ -4,6 +4,11 @@ import { KEY_AUTH_STORE } from "../store/authStore";
 import { storageService } from "./storage";
 
 const noCheckEndpoints401ToRedirect = ["/users/login"]
+const statusLogout = [
+  EHttpStatusCode.UNAUTHORIZED
+]
+
+const isStatusToLogout = (status: number) => statusLogout.includes(status)
 
 export class Api {
   private baseUrl: string;
@@ -25,7 +30,7 @@ export class Api {
       ...options,
     });
 
-    if (response.status === EHttpStatusCode.UNAUTHORIZED && !noCheckEndpoints401ToRedirect.includes(endpoint)) {
+    if (isStatusToLogout(response.status) && !noCheckEndpoints401ToRedirect.includes(endpoint)) {
       storageService.removeItem(KEY_AUTH_STORE)
       window.location.href = "/login"
       return { exito: false, data: {} as T}

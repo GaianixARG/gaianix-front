@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react"
 import type {ROLES} from "./enums"
-import type { IOrderDetails, IUser } from "./interfaces"
+import type { IOrderDetails, IUserAuth } from "./interfaces"
 
 export type TFunctionToggle = "toggle" | "open" | "close"
 export type TRol = keyof typeof ROLES
@@ -78,8 +78,9 @@ export type TAlertContextProvider = {
 export type TAuthContextType = {
   isAuthenticated: boolean
   handleLogin: (username: string, password: string) => Promise<boolean>
+  handleRefreshLogin: () => Promise<boolean>
   handleLogout: () => void
-  user: IUser
+  user: IUserAuth
 }
 
 // FUNCIONES TYPES

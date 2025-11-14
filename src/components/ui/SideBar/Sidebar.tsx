@@ -4,13 +4,12 @@ import logo from "../../../assets/images/logo.png";
 import { PRIVATE_ROUTES_ICONS } from "../../../constants/routes";
 import NavTab from "./NavTab";
 import { useAuthStore } from "../../../store/authStore";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate()
   const user = useAuthStore(state => state.user)
   const handleLogout = useAuthStore(state => state.handleLogout)
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
 
   const onLogout = () => {
     handleLogout()
@@ -35,20 +34,18 @@ const Sidebar = () => {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800">
-          <a
-            href={isAuthenticated ? "/dashboard" : "/"}
+          <Link
+            to="/dashboard"
             className="flex items-center ps-2.5 mb-5"
           >
             <img src={logo} className="h-12 me-3" alt="Gainaix Logo" />
             <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
               Gaianix
             </span>
-          </a>
-          {isAuthenticated && (
-            <p className="p-2 mb-5 bg-primary/40 rounded-lg text-white text-center">
-              {user.name}
-            </p>
-          )}
+          </Link>
+          <p className="p-2 mb-5 bg-primary/40 rounded-lg text-white text-center">
+            {user.name}
+          </p>
 
           {Object.entries(PRIVATE_ROUTES_ICONS).map(([group, routes], idx) => (
             <ul key={`nav-${group}`} className={`space-y-2 font-medium pt-4 mt-4 ${idx > 0 && "border-t border-gray-700"}`}>
@@ -68,7 +65,7 @@ const Sidebar = () => {
               <NavTab
                 path="#"
                 label="Desconectarse"
-                enabled={isAuthenticated}
+                enabled
                 icon={LogOut}
                 onClick={onLogout}
               />

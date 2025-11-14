@@ -18,6 +18,10 @@ export interface IUser {
   role: IRol
   username: string
 }
+
+export interface IUserAuth {
+  name: string
+}
 //#endregion
 
 //#region Dashboard
