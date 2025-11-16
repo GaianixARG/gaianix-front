@@ -15,6 +15,9 @@ const FormDetailsOrdenSiembra = ({
 }: TFormDetailsOrder) => {
   const siembraDetails = order as IOrderSiembra
 
+  const { siembra } = siembraDetails
+  const { datosSemilla } = siembra
+
   const seeds = useSeedStore(state => state.seeds)
   const memoSeeds = useMemo(() => seeds, [seeds])
 
@@ -24,7 +27,7 @@ const FormDetailsOrdenSiembra = ({
   const handleChangeValueFertilizer = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChangeValue("siembra.fertilizante.id", e.target.value)
     // ESTO ES PARA QUE TOME BIEN EN EL BACKEND
-    if (siembraDetails.siembra.fertilizante == null) onChangeValue("siembra.fertilizante.name", "")
+    if (siembra.fertilizante == null) onChangeValue("siembra.fertilizante.name", "")
   }
 
   return (
@@ -33,7 +36,7 @@ const FormDetailsOrdenSiembra = ({
         <div className="flex-1">
           <DatePicker
             id={`fecha-max-siembra_${order.id}`}
-            defaultValue={siembraDetails.siembra.fechaMaxSiembra}
+            defaultValue={siembra.fechaMaxSiembra}
             placeholder="Selecciona una fecha"
             label="Fecha Máxima"
             required
@@ -49,7 +52,8 @@ const FormDetailsOrdenSiembra = ({
           </label>
           <Input
             type="number"
-            value={siembraDetails.siembra.cantidadHectareas}
+            iconRight={<span className="text-accent-light">ha</span>}
+            value={siembra.cantidadHectareas == 0 ? "" : siembra.cantidadHectareas}
             placeholder="Ej: 10"
             required
             onChange={(e) =>
@@ -70,7 +74,7 @@ const FormDetailsOrdenSiembra = ({
               label: seed.name,
             }))}
             addOptionEmpty
-            defaultValue={siembraDetails.siembra.datosSemilla.semilla.id}
+            defaultValue={datosSemilla.semilla.id}
             required
             onChange={({ target }) => onChangeValue("siembra.datosSemilla.semilla.id", target.value)}
           />
@@ -80,8 +84,9 @@ const FormDetailsOrdenSiembra = ({
             Cantidad por ha
           </label>
           <Input
+            type="number"
             iconRight={<span className="text-accent-light">u/ha</span>}
-            value={siembraDetails.siembra.datosSemilla.cantidadSemillasHa}
+            value={datosSemilla.cantidadSemillasHa == 0 ? "" : datosSemilla.cantidadSemillasHa}
             placeholder="Ej: 100000"
             required
             onChange={(e) =>
@@ -101,7 +106,7 @@ const FormDetailsOrdenSiembra = ({
               value: f.id,
               label: f.name,
             }))}
-            defaultValue={siembraDetails.siembra.fertilizante?.id}
+            defaultValue={siembra.fertilizante?.id}
             required
             onChange={handleChangeValueFertilizer}
             addOptionEmpty
@@ -114,7 +119,7 @@ const FormDetailsOrdenSiembra = ({
           <Select
             id={`distancia-siembra_${order.id}`}
             options={getArrayFromEnum(EDistanciaSiembra)}
-            defaultValue={siembraDetails.siembra.distanciaSiembra}
+            defaultValue={siembra.distanciaSiembra}
             required
             onChange={({ target }) =>
               onChangeValue("siembra.distanciaSiembra", target.value)
