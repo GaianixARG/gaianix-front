@@ -1,7 +1,7 @@
 import { BugOff, ChartPie, Droplets, Fence, Sprout, Tractor } from "lucide-react";
 import type { TBoton, TColors, TStatusColor } from "./types";
 import type { DicIcon, DicSize } from "./interfaces";
-import { EOrderType, EPrioridad, ESeed, EStatus } from "./enums";
+import { EMetodoFertilizacion, EOrderType, EPrioridad, ESeed, EStatus } from "./enums";
 
 export const LABEL_PER_ICON: DicIcon = {
   Dashboard: ChartPie,
@@ -135,4 +135,11 @@ export const COLOR_SEMILLA: Record<ESeed, TColors> = {
   [ESeed.Arroz]: "accent-light",
   [ESeed.Cebada]: "info",
   [ESeed.Avena]: "error"
+}
+
+export const METODO_FERTILIZACION_NAME: Record<EMetodoFertilizacion, string> = {
+  [EMetodoFertilizacion.FondoSurco]: "Fondo del Surco",
+  [EMetodoFertilizacion.Fertirrigacion]: "Fertirrigación",
+  [EMetodoFertilizacion.Foliar]: "Foliar",
+  [EMetodoFertilizacion.Localizada]: "Localizada"
 }

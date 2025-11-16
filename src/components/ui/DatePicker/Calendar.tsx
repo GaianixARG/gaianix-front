@@ -48,6 +48,7 @@ const Calendar = ({
     <div className="p-2 bg-gray-20 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-2 px-2">
         <button
+          // type="button"
           onClick={() => changeMonth(-1)}
           className="hover:text-primary"
           title="Mes anterior"
@@ -58,6 +59,7 @@ const Calendar = ({
           {muestraMes(viewDate)}
         </span>
         <button
+          // type="button"
           onClick={() => changeMonth(1)}
           className="hover:text-primary"
           title="Mes siguiente"
@@ -73,6 +75,7 @@ const Calendar = ({
         ))}
         {days.map((day, i) => (
           <button
+            // type="button"
             key={`day_index_${i}`}
             className={`rounded px-0 py-2 transition-colors text-xs ${
               day ? "hover:bg-primary-light/70" : ""

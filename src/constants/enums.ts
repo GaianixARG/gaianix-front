@@ -59,6 +59,9 @@ export enum EHttpStatusCode {
   OK_NO_CONTENT = 204,
 }
 
-
-
-
+export enum EMetodoFertilizacion {
+  FondoSurco,
+  Fertirrigacion,
+  Foliar,
+  Localizada
+}

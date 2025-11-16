@@ -1,14 +1,18 @@
 export const getArrayFromEnum = <T extends Record<string, string | number>>(
   obj: T,
-  filterDoubleKey: boolean = true
+  filterDoubleKey: boolean = true,
+  mapDisplay: Record<string, string> | null = null
 ) => {
   const entries = Object.entries(obj)
 
   if (filterDoubleKey)
-    return entries.filter(([, value]) => typeof value != "string").map(([key, value]) => ({
-    value: value,
-    label: key,
-  }))
+    return entries.filter(([, value]) => typeof value != "string").map(([key, value]) => {
+      const labelMuestra = mapDisplay ? mapDisplay[value] : key
+      return {
+        value: value,
+        label: labelMuestra
+      }
+    })
 
   return entries.map(([, value]) => ({
     value: value,

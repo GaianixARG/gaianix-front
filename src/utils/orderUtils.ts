@@ -1,4 +1,4 @@
-import { EDistanciaSiembra, EOrderType, EPrioridad, ESeed, EStatus } from "../constants/enums"
+import { EDistanciaSiembra, EMetodoFertilizacion, EOrderType, EPrioridad, ESeed, EStatus } from "../constants/enums"
 import type { IOrderBaseDetails, IOrderDetails } from "../constants/interfaces"
 
 const baseOrder: IOrderBaseDetails = {
@@ -45,7 +45,7 @@ export const initialPerType: Record<EOrderType, IOrderDetails> = {
     [EOrderType.Fertilizacion]: {
       ...baseOrder,
       type: EOrderType.Fertilizacion,
-      fertilizacion: { fertilizante: "", dosisKgHa: 0, metodo: "" },
+      fertilizacion: { fertilizante: { id: "", name: ""}, dosisKgHa: 0, metodo: EMetodoFertilizacion.FondoSurco },
     },
     [EOrderType.Cosecha]: {
       ...baseOrder,

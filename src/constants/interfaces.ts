@@ -3,7 +3,7 @@ import type {
   MyOmit,
 } from "./types"
 import type { JSX, LazyExoticComponent } from "react"
-import type { EDistanciaSiembra, EOrderType, EPrioridad, ESeed, EStatus } from "./enums"
+import type { EDistanciaSiembra, EMetodoFertilizacion, EOrderType, EPrioridad, ESeed, EStatus } from "./enums"
 
 // Data
 //#region Usuario
@@ -114,9 +114,9 @@ export interface IOrderSiembra extends IOrderBase {
 export interface IOrderFertilizacion extends IOrderBase {
   type: EOrderType.Fertilizacion
   fertilizacion: {
-    fertilizante: string
+    fertilizante: IFertilizer
     dosisKgHa: number
-    metodo: string
+    metodo: EMetodoFertilizacion
   }
 }
 
