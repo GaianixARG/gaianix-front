@@ -1,5 +1,5 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import ButtonLoading from "../components/ui/ButtonLoading";
 import PublicLayout from "../layouts/PublicLayout";
 import Button from "../components/ui/Button";
@@ -8,19 +8,30 @@ import useAuth from "../hooks/context/useAuth";
 
 
 const Login = () => {
+  const idUsername = useId()
+  const idPassword = useId()
+
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [password, setPassword] = useState("")
-  const [username, setUsername] = useState("")
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
   
   const { onLogin, onRefreshLogin } = useAuth()
-  const handleLogin = (username: string, password: string) => async () => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
     setIsLoading(true)
-    await onLogin(username, password)
+    
+    const formData = new FormData(event.currentTarget)
+
+    const data = {
+      username: formData.get(idUsername)?.toString() ?? "",
+      password: formData.get(idPassword)?.toString() ?? ""
+    }
+
+    await onLogin(data.username, data.password)
     setIsLoading(false)
   }
 
@@ -33,35 +44,33 @@ const Login = () => {
   return (
     <PublicLayout>
       <h1 className="text-5xl font-bold mb-10">Login</h1>
-      <form className="bg-white p-8 rounded shadow-md w-full max-w-sm">
+      <form className="bg-white p-8 rounded shadow-md w-full max-w-sm" onSubmit={handleLogin}>
         <div className="mb-4">
           <label
             className="block text-sm font-medium text-gray-700 mb-2"
-            htmlFor="username"
+            htmlFor={idUsername}
           >
             Username
           </label>
           <input
+            id={idUsername}
+            name={idUsername}
             type="text"
-            id="username"
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-light"
             required
-            defaultValue={username}
-            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div className="mb-6">
-          <label className="block text-sm font-medium mb-2" htmlFor="password">
+          <label className="block text-sm font-medium mb-2" htmlFor={idPassword}>
             Password
           </label>
           <div className="relative">
             <input
+              id={idPassword}
+              name={idPassword}
               type={showPassword ? "text" : "password"}
-              id="password"
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-light"
               required
-              defaultValue={password}
-              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
               onClick={togglePasswordVisibility}
@@ -76,10 +85,10 @@ const Login = () => {
           </div>
         </div>
         <ButtonLoading
+          type="submit"
           isLoading={isLoading}
           className="w-full"
           text="Login"
-          onClick={handleLogin(username, password)}
         />
       </form>
     </PublicLayout>

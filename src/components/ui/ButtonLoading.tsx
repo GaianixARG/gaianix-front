@@ -22,7 +22,7 @@ const ButtonLoading = ({
       <>
         <Loader
           className="mr-2 animate-spin"
-          type="primary"
+          type="tertiary"
           size="sm"
           isLoading={isLoading}
         />
