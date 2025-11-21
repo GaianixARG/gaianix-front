@@ -21,7 +21,6 @@ export const useAuthStore = create<TAuthContextType>()(
         handleLogin: async (username: string, password: string) => {
           try {
             const userData = await authService.login(username, password)
-            console.log(userData)
             set({ isAuthenticated: true, user: userData.data })
             
             return true
