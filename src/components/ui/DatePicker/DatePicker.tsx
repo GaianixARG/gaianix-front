@@ -24,13 +24,21 @@ const DatePicker = ({
   required = false,
   onChange,
 }: Props) => {
-  const { muestraFecha, stringToDate } = useCalendar();
+  const { muestraFecha, formatToValue, stringToDate, getToday } = useCalendar();
+  
+  const today = getToday();
 
-  const today = new Date();
-  const defaultDate = defaultValue != null ? stringToDate(defaultValue) : today;
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const [viewDate, setViewDate] = useState<Date>(today);
 
-  const [selectedDate, setSelectedDate] = useState<Date>(defaultDate);
-  const [viewDate, setViewDate] = useState<Date>(defaultDate);
+
+  useEffect(() => {
+    if (defaultValue != null) {
+      const defaultDate = stringToDate(defaultValue)
+      if (defaultValue !== formatToValue(selectedDate)) setSelectedDate(defaultDate)
+      if (defaultValue !== formatToValue(viewDate)) setViewDate(defaultDate)
+    }
+  }, [defaultValue, formatToValue, stringToDate, selectedDate, viewDate])
 
   const [showPicker, setShowPicker] = useState(false);
   const ref = useRef<HTMLDivElement>(null);

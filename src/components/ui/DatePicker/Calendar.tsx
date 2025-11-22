@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import useCalendar from "../../../hooks/useCalendar";
+import { muestraFecha } from "../../../constants/utils";
 
 type Props = {
   viewDate: Date;
@@ -9,6 +10,7 @@ type Props = {
   setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
   setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
   onChange?: (date: string) => void;
+  disablePreviousDate?: boolean
 };
 
 const Calendar = ({
@@ -18,18 +20,23 @@ const Calendar = ({
   setSelectedDate,
   setShowPicker,
   onChange,
+  disablePreviousDate = true
 }: Props) => {
-  const { muestraFecha, formatToValue, muestraMes, dayNames } = useCalendar();
 
+  const { formatToValue, muestraMes, dayNames, getToday } = useCalendar()
+
+  const today = getToday()
+  
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
+  
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-
+  
   const days = [];
   for (let i = 0; i < firstDay; i++) days.push(null);
   for (let i = 1; i <= daysInMonth; i++) {
-    days.push(new Date(year, month, i));
+    days.push(new Date(year, month, i, 1));
   }
 
   const handleDateClick = (date: Date) => {
@@ -48,7 +55,7 @@ const Calendar = ({
     <div className="p-2 bg-gray-20 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-2 px-2">
         <button
-          // type="button"
+          type="button"
           onClick={() => changeMonth(-1)}
           className="hover:text-primary"
           title="Mes anterior"
@@ -59,7 +66,7 @@ const Calendar = ({
           {muestraMes(viewDate)}
         </span>
         <button
-          // type="button"
+          type="button"
           onClick={() => changeMonth(1)}
           className="hover:text-primary"
           title="Mes siguiente"
@@ -75,7 +82,7 @@ const Calendar = ({
         ))}
         {days.map((day, i) => (
           <button
-            // type="button"
+            type="button"
             key={`day_index_${i}`}
             className={`rounded px-0 py-2 transition-colors text-xs ${
               day ? "hover:bg-primary-light/70" : ""
@@ -85,7 +92,7 @@ const Calendar = ({
                 : "text-gray-800"
             }`}
             onClick={() => day && handleDateClick(day)}
-            disabled={!day}
+            disabled={!day || (disablePreviousDate && (day < today))}
           >
             {day ? day.getDate() : ""}
           </button>
