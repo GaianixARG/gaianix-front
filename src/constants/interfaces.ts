@@ -3,7 +3,7 @@ import type {
   MyOmit,
 } from "./types"
 import type { JSX, LazyExoticComponent } from "react"
-import type { EDistanciaSiembra, EMetodoFertilizacion, EOrderType, EPrioridad, ESeed, EStatus } from "./enums"
+import type { EDistanciaSiembra, EMetodoFertilizacion, EOrderType, EPrioridad, ESeed, EStatus, ETipoPoligono } from "./enums"
 
 // Data
 //#region Usuario
@@ -59,10 +59,25 @@ interface ICampo {
   nombre: string
 }
 
+export interface Coordenada {
+  id: string
+  lat: number
+  lon: number
+}
+
+export interface IPoligonoLote {
+  id: string
+  color: string
+  type: ETipoPoligono
+  radius: number
+  coordenadas: Coordenada[]
+}
+
 export interface ILote {
   id: string
   codigo: string
   campo: ICampo
+  poligono: IPoligonoLote
 }
 //#endregion
 

@@ -29,7 +29,8 @@ const SeedsPage = () => {
       <div className="flex justify-end mb-6">
         <Button
           onClick={() => onEditSeed("")}
-          className="flex items-center justify-center px-4 py-2.5 text-sm bg-orange-800/40 text-white hover:bg-orange-800/70 rounded-full transition-colors duration-200 hover:shadow-md"
+          tipo="tertiary"
+          className="flex items-center justify-center px-4 py-2.5 text-sm text-white rounded-xl transition-colors duration-200 hover:shadow-md"
         >
           <SquarePlus className="w-4 h-4 me-2" /> Nueva Semilla
         </Button>

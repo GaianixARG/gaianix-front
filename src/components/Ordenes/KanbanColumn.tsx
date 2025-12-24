@@ -2,7 +2,6 @@ import { FilterIcon, PlusIcon, SortAscIcon } from "lucide-react"
 import OrderCard from "./OrderCard"
 import Button from "../ui/Button"
 import Badge from "../ui/Badge"
-import { useState } from "react"
 import {
   BG_PER_STATUS_COLOR,
   COLOR_PER_STATUS,
@@ -13,29 +12,12 @@ import { EStatus } from "../../constants/enums"
 import { useAlertStore } from "../../store/alertStore"
 import { useOrderStore } from "../../store/orderStore"
 import type { TColors } from "../../constants/types"
+import { useDragAndDrop } from "../../hooks/useDragAndDrop"
 
 type Props = {
   status: EStatus
   onDropOrder: (orderId: string, newStatus: EStatus) => void
   onSelectOrder: (orderId: string, status: EStatus) => void
-}
-
-const createElementForDragImage = (e: React.DragEvent) => {
-  const target = e.currentTarget as HTMLElement
-  const dragImage = target.cloneNode(true) as HTMLElement
-  dragImage.style.position = "absolute"
-  dragImage.style.width = "240px"
-  document.body.appendChild(dragImage)
-
-  e.dataTransfer.setDragImage(dragImage, 0, 0)
-  setTimeout(() => {
-    document.body.removeChild(dragImage)
-  }, 0)
-}
-
-const handleDragStart = (e: React.DragEvent, orderId: string) => {
-  e.dataTransfer.setData("orderId", orderId)
-  createElementForDragImage(e)
 }
 
 const getClaseTextoTituloColumna = (colorStatus: TColors) => `uppercase ${TEXT_PER_STATUS_COLOR[colorStatus]} font-bold me-1`
@@ -49,26 +31,12 @@ const KanbanColumn = ({
 }: Props) => {
   const orders = useOrderStore(state => state.orders).filter(x => x.status === status)
 
+  const { isActive, handleDragStart, handleDropEnd, handleOnDragOver, handleOnDragLeave } = useDragAndDrop({
+    status,
+    onDropOrder
+  })
+
   const showAlert = useAlertStore(state => state.showAlert)
-  const [isActive, setIsActive] = useState(false)
-
-  const handleDropEnd = (e: React.DragEvent) => {
-    e.preventDefault()
-    const orderId = e.dataTransfer.getData("orderId")
-    if (orderId) onDropOrder(orderId, status)
-
-    setIsActive(false)
-  }
-
-  const handleOnDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsActive(true)
-  }
-
-  const handleOnDragLeave = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsActive(false)
-  }
 
   const colorStatus = COLOR_PER_STATUS[status]
   const claseTextoTituloColumna = getClaseTextoTituloColumna(colorStatus)

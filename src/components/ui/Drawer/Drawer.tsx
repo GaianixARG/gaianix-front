@@ -3,17 +3,18 @@ import Button from "../Button";
 
 type Props = {
   id: string;
-  closeButton: boolean;
+  closeButton?: boolean;
   children?: React.ReactNode;
-};
+} & React.RefAttributes<HTMLDivElement>;
 
-const Drawer = ({ id, closeButton, children }: Props) => {
+const Drawer = ({ id, closeButton = false, children, ref }: Props) => {
   return (
     <div
       id={id}
-      className="fixed top-0 right-0 z-100 h-screen p-4 overflow-y-auto transition-transform duration-400 translate-x-full w-full sm:w-100 bg-accent border-t border-gray-600 shadow-lime-300"
+      className="fixed top-0 right-0 z-1001 h-screen p-4 overflow-y-auto transition-transform duration-400 translate-x-full w-full sm:w-100 bg-accent border-t border-gray-600 shadow-lime-300"
       tabIndex={-1}
       aria-labelledby="drawer-form-label"
+      ref={ref}
     >
       {closeButton && (
         <Button

@@ -9,7 +9,6 @@ import Loader from "../components/ui/Loader";
 
 export default function AppRouter() {
   return (
-      
     <Suspense fallback={<Loader type="primary" size="xl" isLoading  isGlobal/>}>
       <Routes>
         {PUBLIC_ROUTES_COMPONENT.map(({path, component: Component}) => (

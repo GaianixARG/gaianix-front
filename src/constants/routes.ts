@@ -10,6 +10,7 @@ const Siembra = lazy(() => import("../pages/Siembra"));
 const Fertilizacion = lazy(() => import("../pages/Fertilizacion"));
 const Riego = lazy(() => import("../pages/Riego"));
 const Cosecha = lazy(() => import("../pages/Cosecha"));
+const Lotes = lazy(() => import("../pages/Lotes"));
 
 const LABEL_PER_COMPONENT: DicRoute = {
   Landing: Landing,
@@ -20,6 +21,7 @@ const LABEL_PER_COMPONENT: DicRoute = {
   Fertilización: Fertilizacion,
   Riego: Riego,
   Cosecha: Cosecha,
+  Lotes: Lotes
 };
 
 const GROUPS_TABS = {
@@ -29,7 +31,7 @@ const GROUPS_TABS = {
 
 export const PRIVATE_ROUTES: IRoute[] = [
   { path: "/dashboard", label: "Dashboard", enabled: true, group: GROUPS_TABS.Gestion },
-  { path: "/lotes", label: "Lotes", enabled: false, group: GROUPS_TABS.Gestion },
+  { path: "/lotes", label: "Lotes", enabled: true, group: GROUPS_TABS.Gestion },
   { path: "/siembra", label: "Siembra", enabled: true, group: GROUPS_TABS.Ordenes },
   { path: "/fertilizacion", label: "Fertilización", enabled: true, group: GROUPS_TABS.Ordenes },
   { path: "/riego", label: "Riego", enabled: false, group: GROUPS_TABS.Ordenes },

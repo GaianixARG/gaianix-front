@@ -65,3 +65,8 @@ export enum EMetodoFertilizacion {
   Foliar,
   Localizada
 }
+
+export enum ETipoPoligono {
+  Poligono = 'Polygon',
+  Circle = 'Point'
+}

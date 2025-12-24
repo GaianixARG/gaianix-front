@@ -17,8 +17,8 @@
   --color-secondary: #8bc34a; /* Verde claro */
   --color-secondary-light: #c5e1a5; /* Verde muy claro */
   /* Amarillo */
-  --color-tertiary: #b5ad67; /* Amarillo */
-  --color-tertiary-light: #fff9c4; /* Amarillo claro */
+  --color-tertiary: #544736; /* Madera oscuro */
+  --color-tertiary-light: #cec3b1; /* Madera claro */
   --color-accent: var(--color-gray-800);
   --color-accent-light: var(--color-gray-400);
   --color-background: 15deg, rgba(218, 255, 179, 1) 22%,
@@ -41,6 +41,9 @@
 
   /* Breakpoints */
   --breakpoint-xs: 350px;
+
+  --my-grid-cols: 3fr 1fr;
+  --my-grid-rows: 1fr 0.5fr;
 }
 
 @layer utilities {
