@@ -25,18 +25,13 @@ export const useMapStore = create<TMapStore>()(
         const { flyTo } = get()
         const vertices = lote.poligono.coordenadas.map(z => ({ x: z.lat, y: z.lon }))
         const center = getCentroid(vertices)
-        flyTo(center)
+        if (center) flyTo(center)
       },
       removeLayer: (layer: Layer) => {
         const { Map } = get()
 
         Map?.removeLayer(layer)
-      },
-      // updateLayers: (layers: Layer[]) => {
-      //   const { Map } = get()
-        
-      //   Map?.
-      // }
+      }
     }
   )
 )

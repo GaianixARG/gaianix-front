@@ -32,16 +32,16 @@ const initialLote: ILote = {
 }
 
 const CardLote = ({ lote = initialLote, onClick, isEditing, onEdit, onSave, onCancelEdit }: PropsCard) => {
+  const idInputLote = useId()
   const selectedLoteId = useLoteStore(state => state.selectedLoteId);
 
   const { id, codigo, poligono } = lote
 
-  const vertices = poligono?.coordenadas.map(z => ({ x: z.lat, y: z.lon })) ?? []
+  const vertices = poligono.coordenadas.map(z => ({ x: z.lat, y: z.lon })) ?? []
   const centerLote = getCentroid(vertices)
+  if (!centerLote) return
 
   const isSelected = selectedLoteId === id;
-
-  const idInputLote = useId()
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()

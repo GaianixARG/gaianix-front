@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import type { ILote, IPoligonoLote } from "../../constants/interfaces"
 import { useLoteStore } from "../../store/loteStore"
+import { ETipoPoligono } from "../../constants/enums"
 
 const initialPoligono: IPoligonoLote = {
   id: "",
   color: "",
-  coordenadas: []
+  coordenadas: [],
+  type: ETipoPoligono.Poligono,
+  radius: 0
 }
 
 const initialLote: ILote = {

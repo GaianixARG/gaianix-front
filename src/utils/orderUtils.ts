@@ -1,4 +1,4 @@
-import { EDistanciaSiembra, EMetodoFertilizacion, EOrderType, EPrioridad, ESeed, EStatus } from "../constants/enums"
+import { EDistanciaSiembra, EMetodoFertilizacion, EOrderType, EPrioridad, ESeed, EStatus, ETipoPoligono } from "../constants/enums"
 import type { IOrderBaseDetails, IOrderDetails } from "../constants/interfaces"
 
 const baseOrder: IOrderBaseDetails = {
@@ -10,6 +10,13 @@ const baseOrder: IOrderBaseDetails = {
       campo: {
         id: "",
         nombre: ""
+      },
+      poligono: {
+        id: "",
+        color: "",
+        type: ETipoPoligono.Poligono,
+        radius: 0,
+        coordenadas: []
       }
     },
     type: EOrderType.Cosecha,
